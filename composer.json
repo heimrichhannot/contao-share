@@ -1,0 +1,32 @@
+{
+    "name": "heimrichhannot/contao-share",
+    "description":"A helper module for pdf-print, print and social share functionality based on bootstrap to custom modules.",
+    "keywords":["contao", "share", "facebook", "googleplus", "twitter", "pdf"],
+    "type": "contao-module",
+    "homepage":"https://github.com/heimrichhannot/contao-share",
+    "license":"LGPL-3.0+",
+    "authors":[
+        {
+            "name":"Heimrich & Hannot",
+            "email":"digitales@heimrich-hannot.de",
+            "homepage":"http://www.heimrich-hannot.de",
+            "role":"Developer"
+        }
+    ],
+    "support":{
+        "issues":"https://github.com/heimrichhannot/contao-share/issues"
+    },
+    "require": {
+        "contao/core": ">=3.3,<4-dev"
+    },
+    "autoload": {
+        "classmap": [""]
+    },
+    "extra": {
+        "contao": {
+            "sources": {
+                "": "system/modules/share"
+            }
+        }
+    }
+}
