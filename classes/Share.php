@@ -183,7 +183,7 @@ class Share extends \Frontend
     public function generateIcal( $eventID)
     {
         $ical = new \vcalendar();
-        $ical->setConfig('ical_' . $this->id, 'anwaltverein.de' );
+        $ical->setConfig('ical_' . $this->id);
         $ical->setProperty( 'method', 'PUBLISH' );
         $ical->setProperty( "X-WR-TIMEZONE", $GLOBALS['TL_CONFIG']['timeZone']);
         $time = time();
@@ -210,7 +210,7 @@ class Share extends \Frontend
                 }
             }
             $vevent->setProperty( 'summary', $objEvent->title, ENT_QUOTES, 'UTF-8');
-            $vevent->setProperty( 'description', html_entity_decode(strip_tags(preg_replace('/<br \\/>/', "\n", $objEvent->details)), ENT_QUOTES, 'UTF-8'));
+            $vevent->setProperty( 'description', strip_tags($objEvent->details ? $objEvent->details : $objEvent->teaser));
             if ($objEvent->recurring)
             {
                 $count = 0;
@@ -360,14 +360,15 @@ class Share extends \Frontend
 		$pdf->SetSubject($this->title);
 		$pdf->SetKeywords($this->keywords);
 
-        // add fonts
-        $fonts = array('/files/themes/anwaltverein.de/font/SourceSansPro-Regular.ttf',
-                       '/files/themes/anwaltverein.de/font/SourceSansPro-Bold.ttf',
-                       '/files/themes/anwaltverein.de/font/SourceSansPro-Semibold.ttf',
-                       '/files/themes/anwaltverein.de/font/SourceSansPro-Light.ttf');
+		// Set font
+		$pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
 
-//        foreach ($fonts as $currentFont)
-//            $pdf->addTTFfont(TL_ROOT . $currentFont);
+
+		// Add custom fonts
+		if($this->objModel->share_pdfFontSRC != null)
+		{
+			$this->addCustomFontsToPDF($pdf, deserialize($this->objModel->share_pdfFontSRC, true));
+		}
 
 		// Prevent font subsetting (huge speed improvement)
 		$pdf->setFontSubsetting(false);
@@ -382,7 +383,7 @@ class Share extends \Frontend
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
 		// Set auto page breaks
-		$pdf->SetAutoPageBreak(true, 30);
+		$pdf->SetAutoPageBreak(true, 15);
 
 		// Set image scale factor
 		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -393,13 +394,6 @@ class Share extends \Frontend
 		// Initialize document and add a page
 		$pdf->AddPage();
 
-		// Set font
-		$pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
-
-		$singleSRC = "files/themes/common/img/logos/anwaltverein-logo.svg";
-		$imgWidth = 50;
-		$imgHeight = 0;
-
 		// Add an custom logo
 		if($this->objModel->share_pdfLogoSRC != '')
 		{
@@ -407,6 +401,9 @@ class Share extends \Frontend
 
 			if ($objModel !== null && is_file(TL_ROOT . '/' . $objModel->path))
 			{
+				$imgWidth = 50;
+				$imgHeight = 0;
+
 				$imgSize = deserialize($this->objModel->share_pdfLogoSize, true);
 
 				if($imgSize[0])
@@ -420,19 +417,13 @@ class Share extends \Frontend
 				}
 
 				$singleSRC = $objModel->path;
+
+				// file, x, y, w (if 0 auto calc), h, type, link, align ...
+				$pdf->ImageSVG($singleSRC, 15, 15, $imgWidth, $imgHeight, "", 'L');
+				$pdf->setPageMark();
+				$pdf->SetY(20);
 			}
 		}
-
-		// file, x, y, w (if 0 auto calc), h, type, link, align ...
-		$pdf->ImageSVG($singleSRC, 15, 15, $imgWidth, $imgHeight, "", 'L');
-		$pdf->setPageMark();
-		$pdf->SetY(30);
-
-		// Write the HTML content
-		$css = "<style>
-                    * { font-family: 'Source Sans Pro', sans-serif; }
-                    .modal-header { display: none; }
-                </style>";
 
 		// Add an custom css
 		if($this->objModel->share_pdfCssSRC != '')
@@ -445,9 +436,10 @@ class Share extends \Frontend
 			}
 		}
 
+		$tagvs = array('p' => array(1 => array('h' => 0.0001, 'n' => 1)));
+		$pdf->setHtmlVSpace($tagvs);
 
-
-		$pdf->writeHTML($css. $strArticle, true, 0, true, 0);
+		$pdf->writeHTML($css . $strArticle, true, false, true, false, '');
 
 		// Close and output PDF document
 		$pdf->lastPage();
@@ -456,6 +448,22 @@ class Share extends \Frontend
 		// Stop script execution
 		exit;
 	}
+
+	protected function addCustomFontsToPDF(\TCPDF &$pdf, array $arrFonts)
+	{
+		$objModels = \FilesModel::findMultipleByUuids($arrFonts);
+		
+		if($objModels === null) return false;
+
+		while($objModels->next())
+		{
+			if (!file_exists(TL_ROOT . '/' . $objModels->path)) continue;
+
+			$font = \TCPDF_FONTS::addTTFfont(TL_ROOT . '/' . $objModels->path, 'TrueTypeUnicode', '', 96);
+			$pdf->SetFont($font, '', $this->objModel->share_pdfFontSize ? $this->objModel->share_pdfFontSize : 13, false);
+		}
+	}
+
 
 
 	/**

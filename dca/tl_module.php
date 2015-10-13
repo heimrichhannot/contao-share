@@ -20,7 +20,7 @@ $dc['palettes']['__selector__'][] = 'addShare';
 /**
  * Subpalettes
  */
-$dc['subpalettes']['addShare'] = 'share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFooterText';
+$dc['subpalettes']['addShare'] = 'share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
 
 $arrFields = array
 (
@@ -47,6 +47,22 @@ $arrFields = array
 		'inputType'               => 'fileTree',
 		'eval'                    => array('filesOnly'=>true, 'fieldType'=>'radio', 'tl_class'=>'clr'),
 		'sql'                     => "binary(16) NULL"
+	),
+	'share_pdfFontSRC' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['share_pdfFontSRC'],
+		'exclude'                 => true,
+		'inputType'               => 'fileTree',
+		'eval'                    => array('filesOnly'=>true, 'fieldType'=>'checkbox', 'tl_class'=>'clr', 'extensions' => 'ttf', 'multiple' => true),
+		'sql'                     => "blob NULL"
+	),
+	'share_pdfFontSize' => array(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['share_pdfFontSize'],
+		'exclude'                 => true,
+		'inputType'               => 'text',
+		'default'				  => 13,
+		'eval'                    => array('maxlength'=>10, 'rgxp' => 'digit'),
+		'sql'                     => "int(10) unsigned NOT NULL default '0'"
 	),
 	'share_pdfLogoSize' => array
 	(
