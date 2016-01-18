@@ -14,6 +14,9 @@
 $GLOBALS['TL_LANG']['tl_module']['addShare'][0] = 'Syndikationen aktivieren';
 $GLOBALS['TL_LANG']['tl_module']['addShare'][1] = 'Hier legen Sie fest, ob der Beitrag gedruckt werden kann, als PDF heruntergeladen, oder in Sozialen Netzwerken geteilt werden kann.';
 
+$GLOBALS['TL_LANG']['tl_module']['share_buttons'][0] = 'Syndikaktionen';
+$GLOBALS['TL_LANG']['tl_module']['share_buttons'][1] = 'Bitte wählen Sie die Syndikationen aus.';
+
 $GLOBALS['TL_LANG']['tl_module']['share_pdfLogoSRC'][0] = 'PDF-Logo Quelldatei';
 $GLOBALS['TL_LANG']['tl_module']['share_pdfLogoSRC'][1] = 'Bitte wählen Sie eine Datei aus der Dateiübersicht aus.';
 
@@ -31,3 +34,17 @@ $GLOBALS['TL_LANG']['tl_module']['share_pdfLogoSize'][1] = 'Hier können Sie die
 
 $GLOBALS['TL_LANG']['tl_module']['share_pdfFooterText'][0] = 'Fußzeile';
 $GLOBALS['TL_LANG']['tl_module']['share_pdfFooterText'][1] = 'Hier können Sie einen Text für die Fußzeile angeben.';
+
+/**
+ * Legends
+ */
+$GLOBALS['TL_LANG']['tl_module']['share_legend'] = 'Share-Einstellungen';
+
+/**
+ * References
+ */
+$GLOBALS['TL_LANG']['tl_module']['references']['share_buttons']['pdfButton'] = 'Beitrag als PDF';
+$GLOBALS['TL_LANG']['tl_module']['references']['share_buttons']['printButton'] = 'Beitrag Drucken';
+$GLOBALS['TL_LANG']['tl_module']['references']['share_buttons']['facebook'] = 'Auf Facebook teilen';
+$GLOBALS['TL_LANG']['tl_module']['references']['share_buttons']['twitter'] = 'Auf Twitter teilen';
+$GLOBALS['TL_LANG']['tl_module']['references']['share_buttons']['gplus'] = 'Auf Google+ teilen';

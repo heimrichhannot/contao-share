@@ -11,3 +11,10 @@ A helper module for pdf-print, print and social share functionality based on boo
 - ical-event-button
 - dropdown menu with facebook/twitter/googleplus share
 
+### Template Syntax
+
+Add the following Syntax to your templates, to provide share links.
+
+```
+<?= $this->share; ?>
+```

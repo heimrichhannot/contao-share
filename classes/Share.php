@@ -51,9 +51,30 @@ class Share extends \Frontend
 		$arrHeadline = deserialize($objModule->headline);
 		$this->headline = is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
 		$this->hl = is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
-		
-		
-        switch($this->arrData['type']) {
+
+		$this->setDefaultButtons($this->arrData['type']);
+
+		$arrButtons = deserialize($this->arrData['share_buttons'], true);
+
+		// overwrite buttons
+		if(!empty($arrButtons))
+		{
+			$this->pdfButton = false;
+			$this->printButton = false;
+			$this->facebook = false;
+			$this->twitter = false;
+			$this->gplus = false;
+
+			foreach ($arrButtons as $key => $strType)
+			{
+				$this->{$strType} = true;
+			}
+		}
+	}
+
+	protected function setDefaultButtons($strType)
+	{
+		switch($strType) {
 			case 'newsreader':
 			case 'newsreader_plus':
 				$this->pdfButton = true;
@@ -61,24 +82,24 @@ class Share extends \Frontend
 				$this->facebook = true;
 				$this->twitter = true;
 				$this->gplus = true;
-			break;
+				break;
 			case 'eventreader':
-            case 'eventreader_plus':
-                $this->pdfButton = true;
-                $this->printButton = true;
-                $this->icalButton = true;
+			case 'eventreader_plus':
+				$this->pdfButton = true;
+				$this->printButton = true;
+				$this->icalButton = true;
 				$this->facebook = true;
 				$this->twitter = true;
 				$this->gplus = true;
-			break;
-            default:
-                $this->pdfButton = true;
-                $this->printButton = true;
-                $this->icalButton = false;
+				break;
+			default:
+				$this->pdfButton = true;
+				$this->printButton = true;
+				$this->icalButton = false;
 				$this->facebook = true;
 				$this->twitter = true;
 				$this->gplus = true;
-        }
+		}
 	}
 
 
