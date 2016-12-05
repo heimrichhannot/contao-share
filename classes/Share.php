@@ -11,6 +11,8 @@
 namespace HeimrichHannot\Share;
 
 
+use HeimrichHannot\Haste\Util\Url;
+
 class Share extends \Frontend
 {
 	protected $strItem;
@@ -175,10 +177,10 @@ class Share extends \Frontend
 		global $objPage;
 
 		// Add syndication variables
-		$request = \Environment::get('indexFreeRequest');
+		$request = Url::removeAllParametersFromUri(\Environment::get('indexFreeRequest'));
 
 		$this->Template->print = '#';
-		$this->Template->encUrl = rawurlencode(\Environment::get('base') . \Environment::get('request'));
+		$this->Template->encUrl = Url::removeAllParametersFromUri(rawurlencode(\Environment::get('base') . \Environment::get('request')));
 		$this->Template->encTitle = rawurlencode($objPage->pageTitle);
 		$this->Template->href = $request . ((strpos($request, '?') !== false) ? '&amp;' : '?') . 'pdf=' . $this->id;
         $this->Template->ical = $request . "?ical=" . $this->objCurrent->id . "&title=" . urlencode("Termin speichern");
