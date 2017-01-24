@@ -139,8 +139,6 @@ class Share extends \Frontend
         // PDF
         if (strlen(\Input::get('pdf'))) {
 
-            \Input::setGet("pdf", false);  // prevent endless loops, because of generate
-
             $strClass = \Module::findClass($this->objModel->type);
 
             if(!class_exists($strClass))
@@ -150,8 +148,15 @@ class Share extends \Frontend
 
             $objModule = new $strClass($this->objModel);
 
-            $this->strItem = $objModule->generate();
-            $this->generatePdf();
+			if(!$objModule->addShare)
+			{
+				return;
+			}
+
+			\Input::setGet("pdf", false);  // prevent endless loops, because of generate
+
+			$this->strItem = $objModule->generate();
+			$this->generatePdf();
         }
 
 
@@ -306,6 +311,8 @@ class Share extends \Frontend
 	 */
 	public function generatePdf()
 	{
+		ob_clean();
+
 		// Generate article
 		$strArticle = $this->replaceInsertTags($this->strItem, false);
 		$strArticle = html_entity_decode($strArticle, ENT_QUOTES, \Config::get('characterSet'));
