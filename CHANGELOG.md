@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2017-04-05
+
+### Added
+- if a custom print template is set within module configuration, a custom print page will be created, with better debug abilities
+- ob_clean before pdf output
+
 ## [1.0.4] - 2017-01-24
 
 ### Fixed

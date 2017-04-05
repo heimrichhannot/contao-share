@@ -3,11 +3,9 @@
 /**
  * Contao Open Source CMS
  *
- * Copyright (c) 2005-2015 Leo Feyer
+ * Copyright (c) 2005-2017 Leo Feyer
  *
- * @package Share
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * @license LGPL-3.0+
  */
 
 
@@ -25,9 +23,15 @@ ClassLoader::addNamespaces(array
  */
 ClassLoader::addClasses(array
 (
+	// Elements
+	'HeimrichHannot\Share\Elements\ContentModule' => 'system/modules/share/elements/ContentModule.php',
+
 	// Classes
-	'HeimrichHannot\Share\Share' => 'system/modules/share/classes/Share.php',
-    'HeimrichHannot\Share\TCPDF_CustomPdf' => 'system/modules/share/classes/TCPDF_CustomPdf.php',
+	'HeimrichHannot\Share\Hooks'                  => 'system/modules/share/classes/Hooks.php',
+	'HeimrichHannot\Share\Share'                  => 'system/modules/share/classes/Share.php',
+	'HeimrichHannot\Share\Backend\Module'         => 'system/modules/share/classes/backend/Module.php',
+	'HeimrichHannot\Share\PrintPage'              => 'system/modules/share/classes/PrintPage.php',
+	'HeimrichHannot\Share\TCPDF_CustomPdf'        => 'system/modules/share/classes/TCPDF_CustomPdf.php',
 ));
 
 
@@ -36,5 +40,6 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'share_default' => 'system/modules/share/templates/share',
+	'share_print_default' => 'system/modules/share/templates/share/print',
+	'share_default'       => 'system/modules/share/templates/share',
 ));

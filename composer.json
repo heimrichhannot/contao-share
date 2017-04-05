@@ -1,32 +1,44 @@
 {
-    "name": "heimrichhannot/contao-share",
-    "description":"A helper module for pdf-print, print and social share functionality based on bootstrap to custom modules.",
-    "keywords":["contao", "share", "facebook", "googleplus", "twitter", "pdf"],
-    "type": "contao-module",
-    "homepage":"https://github.com/heimrichhannot/contao-share",
-    "license":"LGPL-3.0+",
-    "authors":[
-        {
-            "name":"Heimrich & Hannot",
-            "email":"digitales@heimrich-hannot.de",
-            "homepage":"http://www.heimrich-hannot.de",
-            "role":"Developer"
-        }
-    ],
-    "support":{
-        "issues":"https://github.com/heimrichhannot/contao-share/issues"
-    },
-    "require": {
-        "contao/core": ">=3.3,<4-dev"
-    },
-    "autoload": {
-        "classmap": [""]
-    },
-    "extra": {
-        "contao": {
-            "sources": {
-                "": "system/modules/share"
-            }
-        }
+  "name": "heimrichhannot/contao-share",
+  "description": "A helper module for pdf-print, print and social share functionality based on bootstrap to custom modules.",
+  "keywords": [
+    "contao",
+    "share",
+    "facebook",
+    "googleplus",
+    "twitter",
+    "pdf"
+  ],
+  "type": "contao-module",
+  "homepage": "https://github.com/heimrichhannot/contao-share",
+  "license": "LGPL-3.0+",
+  "authors": [
+    {
+      "name": "Heimrich & Hannot",
+      "email": "digitales@heimrich-hannot.de",
+      "homepage": "http://www.heimrich-hannot.de",
+      "role": "Developer"
     }
+  ],
+  "support": {
+    "issues": "https://github.com/heimrichhannot/contao-share/issues"
+  },
+  "require": {
+    "php": "~5.4 || ~7.0",
+    "contao/core-bundle": "^3.5.1 || ~4.1",
+    "contao-community-alliance/composer-plugin": "~2.4 || ~3.0",
+    "heimrichhannot/contao-request": "^1.1"
+  },
+  "autoload": {
+    "classmap": [
+      ""
+    ]
+  },
+  "extra": {
+    "contao": {
+      "sources": {
+        "": "system/modules/share"
+      }
+    }
+  }
 }

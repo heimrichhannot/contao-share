@@ -5,7 +5,7 @@
 <ul class="share-links list-inline hidden-print">
     <?php if ($this->printButton): ?>
 		<li class="hidden-xs">
-			<a href="<?php echo $this->print; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->printTitle; ?>" onclick="window.print();return false">
+			<a href="<?php echo $this->print; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->printTitle; ?>" target="_blank">
 				<i class="ei ei-printer"></i><span class="sr-only"><?php echo $this->printTitle; ?></span>
 			</a>
 		</li>
