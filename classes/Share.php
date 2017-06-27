@@ -14,6 +14,7 @@ namespace HeimrichHannot\Share;
 
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\Request\Request;
+use HeimrichHannot\Share\TCPDF_CustomPdf;
 
 class Share extends \Frontend
 {
@@ -460,7 +461,7 @@ class Share extends \Frontend
         $l['w_page']          = 'page';
 
         // Include library
-        require_once TL_ROOT . '/system/config/tcpdf.php';
+//        require_once TL_ROOT . '/system/config/tcpdf.php';
 
         // Create new PDF document
         $pdf = new TCPDF_CustomPdf($this->objModel, PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true);
