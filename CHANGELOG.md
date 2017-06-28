@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.1.2] - 2017-06-28
+
+### Fixed
+- workaround for tcpdf php7 incompatibility
+
+### Added
+- pdf constant in `Share`
+
 ## [1.1.1] - 2017-05-09
 
 ### Added
