@@ -29,6 +29,7 @@ class Share extends \Frontend
     protected $socialShare = false;
 
     const SHARE_REQUEST_PARAMETER_PRINT = 'print';
+    const SHARE_REQUEST_PARAMETER_PDF = 'pdf';
 
     public function __construct($objModule, $objCurrent)
     {
@@ -143,7 +144,7 @@ class Share extends \Frontend
         }
 
         // PDF
-        if (strlen(\Input::get('pdf')))
+        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_PDF)))
         {
 
             $strClass = \Module::findClass($this->objModel->type);
@@ -398,30 +399,6 @@ class Share extends \Frontend
         $strArticle = preg_replace('/<a\s.*?>(.*?)<\/a>/xsi', '${1}', $strArticle);
         // change https image src to http
         $strArticle = preg_replace('/(?<=src=\")https:/xsi', 'http:', $strArticle);
-
-
-        /*//        $internalErrors = libxml_use_internal_errors(true);
-                $dom = new \DOMDocument();
-                $dom->encoding = "UTF-8";
-                $dom->loadHTML($strArticle, LIBXML_HTML_NOIMPLIED);
-                // Remove https from image urls
-        //        libxml_use_internal_errors($internalErrors);
-                foreach ($dom->getElementsByTagName('img') as $image) {
-                    $image->setAttribute('src', preg_replace('/https?:/', 'http:', $image->getAttribute('src')));
-                }
-                $xpath = new \DOMXPath($dom);
-                // Remove comments from template
-                foreach ($xpath->query('//comment()') as $comment) {
-                    $comment->parentNode->removeChild($comment);
-                }
-                // Remove links and keep content
-                foreach ($dom->getElementsByTagName('a') as $link) {
-                    $content = $link->value;
-                    $node = $dom->createTextNode($content);
-                    $link->parentNode->replaceChild($node, $link);
-                }
-
-                $strArticle = $dom->saveHTML();*/
 
         // Remove form elements and JavaScript links and scripts
         $arrSearch = [
