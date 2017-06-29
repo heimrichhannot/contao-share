@@ -161,7 +161,7 @@ class Share extends \Frontend
                 return;
             }
 
-            \Input::setGet("pdf", false);  // prevent endless loops, because of generate
+            \Input::setGet(Share::SHARE_REQUEST_PARAMETER_PDF, false);  // prevent endless loops, because of generate
 
             $this->strItem = $objModule->generate();
             $this->generatePdf();
@@ -216,7 +216,7 @@ class Share extends \Frontend
     /**
      * Support share print for modules
      *
-     * @param \ModuleModel $objRow
+     * @param \ModuleModel $objModel
      * @param string       $strBuffer
      * @param \Module      $objModule
      *
