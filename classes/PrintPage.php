@@ -125,6 +125,14 @@ class PrintPage extends \PageRegular
 
         $this->Template->buffer = $this->getBuffer();
 
+        $this->generateHead($objPage);
+
+        // Print the template to the screen
+        $this->Template->output($blnCheckRequest);
+    }
+
+    protected function generateHead($objPage)
+    {
         // toggle print dialog
         $strScript = 'window.print();';
 
@@ -135,10 +143,9 @@ class PrintPage extends \PageRegular
         }
 
         $this->Template->head = \Template::generateInlineScript($strScript, $objPage->outputFormat != 'html5');
-
-        // Print the template to the screen
-        $this->Template->output($blnCheckRequest);
     }
+
+
 
     /**
      * Check whether a property is set

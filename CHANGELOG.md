@@ -1,13 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.1.2] - 2017-06-28
+## [1.1.2] - 2017-06-29
 
 ### Fixed
 - workaround for tcpdf php7 incompatibility
+- error in documentation-comment
 
 ### Added
-- pdf constant in `Share`
+- PDFPage class
+- pdf and ical constant in `Share`
+- generateHead-Method in `PrintPage`
+
 
 ## [1.1.1] - 2017-05-09
 

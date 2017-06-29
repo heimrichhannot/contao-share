@@ -30,6 +30,7 @@ class Share extends \Frontend
 
     const SHARE_REQUEST_PARAMETER_PRINT = 'print';
     const SHARE_REQUEST_PARAMETER_PDF = 'pdf';
+    const SHARE_REQUEST_PARAMETER_ICAL = 'ical';
 
     public function __construct($objModule, $objCurrent)
     {
@@ -136,9 +137,9 @@ class Share extends \Frontend
 
 
         // Export iCal
-        if (strlen(\Input::get('ical')))
+        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_ICAL)))
         {
-            $this->generateIcal(\Input::get('ical'));
+            $this->generateIcal(\Input::get(Share::SHARE_REQUEST_PARAMETER_ICAL));
 
             return;
         }
