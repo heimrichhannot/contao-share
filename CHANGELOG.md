@@ -1,17 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.1.2] - 2017-06-29
+## [1.2.0] - 2017-06-29
+
+### Added
+- option to choose mpdf for pdf generation
+- PDFPage class
+- pdf and ical constant in `Share`
+- generateHead-Method in `PrintPage`
+- added mpdf to composer suggest
 
 ### Fixed
 - workaround for tcpdf php7 incompatibility
 - error in documentation-comment
-
-### Added
-- PDFPage class
-- pdf and ical constant in `Share`
-- generateHead-Method in `PrintPage`
-
 
 ## [1.1.1] - 2017-05-09
 

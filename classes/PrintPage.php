@@ -71,10 +71,10 @@ class PrintPage extends \PageRegular
         // Get the page layout
         $objLayout = $this->getPageLayout($objPage);
 
-        /** @var \FrontendTemplate|object $objTemplate */
-        $objTemplate = new \FrontendTemplate($this->strTemplate);
-
-        $this->Template = $objTemplate;
+        /**
+         * @var \FrontendTemplate
+         */
+        $this->Template = new \FrontendTemplate($this->strTemplate);
 
         // Default settings
         $this->Template->layout   = $objLayout;
@@ -127,8 +127,9 @@ class PrintPage extends \PageRegular
 
         $this->generateHead($objPage);
 
-        // Print the template to the screen
-        $this->Template->output($blnCheckRequest);
+        $this->Template->head = \Template::generateInlineScript($strScript, $objPage->outputFormat != 'html5');
+
+        return $this->generateOutput($blnCheckRequest);
     }
 
     protected function generateHead($objPage)
@@ -145,7 +146,11 @@ class PrintPage extends \PageRegular
         $this->Template->head = \Template::generateInlineScript($strScript, $objPage->outputFormat != 'html5');
     }
 
-
+    protected function generateOutput ($blnCheckRequest)
+    {
+        // Print the template to the screen
+        $this->Template->output($blnCheckRequest);
+    }
 
     /**
      * Check whether a property is set

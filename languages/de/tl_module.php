@@ -20,6 +20,9 @@ $arrLang['addShare'][1] = 'Hier legen Sie fest, ob der Beitrag gedruckt werden k
 $arrLang['share_buttons'][0] = 'Syndikaktionen';
 $arrLang['share_buttons'][1] = 'Bitte wählen Sie die Syndikationen aus.';
 
+$arrLang['share_pdfRenderer'][0] = 'PDF-Renderer auswählen';
+$arrLang['share_pdfRenderer'][1] = 'Bitte wählen Sie eine Bibliothek zur Erzeugung der PDF-Datei aus.';
+
 $arrLang['share_pdfLogoSRC'][0] = 'PDF-Logo Quelldatei';
 $arrLang['share_pdfLogoSRC'][1] = 'Bitte wählen Sie eine Datei aus der Dateiübersicht aus.';
 

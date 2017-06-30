@@ -162,7 +162,7 @@ class Share extends \Frontend
                 return;
             }
 
-            \Input::setGet(Share::SHARE_REQUEST_PARAMETER_PDF, false);  // prevent endless loops, because of generate
+            \Input::setGet("pdf", false);  // prevent endless loops, because of generate
 
             $this->strItem = $objModule->generate();
             $this->generatePdf();
@@ -217,7 +217,7 @@ class Share extends \Frontend
     /**
      * Support share print for modules
      *
-     * @param \ModuleModel $objModel
+     * @param \ModuleModel $objRow
      * @param string       $strBuffer
      * @param \Module      $objModule
      *
@@ -391,205 +391,15 @@ class Share extends \Frontend
     {
         ob_clean();
 
-        // Generate article
-        $strArticle = $this->replaceInsertTags($this->strItem, false);
-        $strArticle = html_entity_decode($strArticle, ENT_QUOTES, \Config::get('characterSet'));
-        $strArticle = $this->convertRelativeUrls($strArticle, '', true);
-
-        //Remove Links due TCPDF bug
-        $strArticle = preg_replace('/<a\s.*?>(.*?)<\/a>/xsi', '${1}', $strArticle);
-        // change https image src to http
-        $strArticle = preg_replace('/(?<=src=\")https:/xsi', 'http:', $strArticle);
-
-        // Remove form elements and JavaScript links and scripts
-        $arrSearch = [
-            '@<form.*</form>@Us',
-            '@<a [^>]*href="[^"]*javascript:[^>]+>.*</a>@Us',
-            '@<script>.*</script>@Us',
-        ];
-
-        $strArticle = preg_replace($arrSearch, '', $strArticle);
-
-        // HOOK: allow individual PDF routines
-        if (isset($GLOBALS['TL_HOOKS']['printShareItemAsPdf']) && is_array($GLOBALS['TL_HOOKS']['printShareItemAsPdf']))
+        global $objPage;
+        $pdfPage = new PDFPage($this->objModel, $this->strItem);
+        $renderer = $this->objModel->share_pdfRenderer;
+        if (!empty($renderer) && $renderer == 'mpdf')
         {
-            foreach ($GLOBALS['TL_HOOKS']['printShareItemAsPdf'] as $callback)
-            {
-                $this->import($callback[0]);
-                $this->{$callback[0]}->{$callback[1]}($strArticle, $this);
-            }
+            $pdfPage->mpdf = true;
         }
-
-        // URL decode image paths (see #6411)
-        $strArticle = preg_replace_callback(
-            '@(src="[^"]+")@',
-            function ($arg)
-            {
-                return rawurldecode($arg[0]);
-            },
-            $strArticle
-        );
-
-        // Handle line breaks in preformatted text
-        $strArticle = preg_replace_callback(
-            '@(<pre.*</pre>)@Us',
-            function ($arg)
-            {
-                return str_replace("\n", '<br>', $arg[0]);
-            },
-            $strArticle
-        );
-
-        // Default PDF export using TCPDF
-        $arrSearch = [
-            '@<span style="text-decoration: ?underline;?">(.*)</span>@Us',
-            '@(<img[^>]+>)@',
-            '@(<div[^>]+block[^>]+>)@',
-            '@[\n\r\t]+@',
-            '@<br( /)?><div class="mod_article@',
-            '@href="([^"]+)(pdf=[0-9]*(&|&amp;)?)([^"]*)"@',
-        ];
-
-        $arrReplace = [
-            '<u>$1</u>',
-            '<br>$1',
-            '<br>$1',
-            ' ',
-            '<div class="mod_article',
-            'href="$1$4"',
-        ];
-
-        $strArticle = preg_replace($arrSearch, $arrReplace, $strArticle);
-
-        // TCPDF configuration
-        $l['a_meta_dir']      = 'ltr';
-        $l['a_meta_charset']  = \Config::get('characterSet');
-        $l['a_meta_language'] = substr($GLOBALS['TL_LANGUAGE'], 0, 2);
-        $l['w_page']          = 'page';
-
-        // Include library
-//        require_once TL_ROOT . '/system/config/tcpdf.php';
-
-        // Create new PDF document
-        $pdf = new TCPDF_CustomPdf($this->objModel, PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true);
-
-        // Set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor(PDF_AUTHOR);
-        $pdf->SetTitle($this->title);
-        $pdf->SetSubject($this->title);
-        $pdf->SetKeywords($this->keywords);
-
-        // Set font
-        $pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
-
-
-        // Add custom fonts
-        if ($this->objModel->share_pdfFontSRC != null)
-        {
-            $this->addCustomFontsToPDF($pdf, deserialize($this->objModel->share_pdfFontSRC, true));
-        }
-
-        // Prevent font subsetting (huge speed improvement)
-        $pdf->setFontSubsetting(false);
-
-        // Remove default header/footer
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(true);
-
-        // Set margins
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-        // Set auto page breaks
-        $pdf->SetAutoPageBreak(true, 15);
-
-        // Set image scale factor
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
-        // Set some language-dependent strings
-        $pdf->setLanguageArray($l);
-
-        // Initialize document and add a page
-        $pdf->AddPage();
-
-        // Add an custom logo
-        if ($this->objModel->share_pdfLogoSRC != '')
-        {
-            $objModel = \FilesModel::findByUuid($this->objModel->share_pdfLogoSRC);
-
-            if ($objModel !== null && is_file(TL_ROOT . '/' . $objModel->path))
-            {
-                $imgWidth  = 50;
-                $imgHeight = 0;
-
-                $imgSize = deserialize($this->objModel->share_pdfLogoSize, true);
-
-                if ($imgSize[0])
-                {
-                    $imgWidth = $imgSize[0];
-                }
-
-                if ($imgSize[1])
-                {
-                    $imgHeight = $imgSize[1];
-                }
-
-                $singleSRC = $objModel->path;
-
-                // file, x, y, w (if 0 auto calc), h, type, link, align ...
-                $pdf->ImageSVG($singleSRC, 15, 15, $imgWidth, $imgHeight, "", 'L');
-                $pdf->setPageMark();
-                $pdf->SetY(20);
-            }
-        }
-
-        // Add an custom css
-        if ($this->objModel->share_pdfCssSRC != '')
-        {
-            $objModel = \FilesModel::findByUuid($this->objModel->share_pdfCssSRC);
-
-            if ($objModel !== null && is_file(TL_ROOT . '/' . $objModel->path))
-            {
-                $css = '<style>' . file_get_contents(TL_ROOT . '/' . $objModel->path) . '</style>';
-            }
-        }
-
-        $tagvs = ['p' => [1 => ['h' => 0.0001, 'n' => 1]]];
-        $pdf->setHtmlVSpace($tagvs);
-
-        $pdf->writeHTML($css . $strArticle, true, false, true, false, '');
-
-        // Close and output PDF document
-        $pdf->lastPage();
-        $pdf->Output(standardize(ampersand($this->objCurrent->title, false)) . '.pdf', 'D');
-
-        // Stop script execution
-        exit;
+        $pdfPage->generate($objPage);
     }
-
-    protected function addCustomFontsToPDF(\TCPDF &$pdf, array $arrFonts)
-    {
-        $objModels = \FilesModel::findMultipleByUuids($arrFonts);
-
-        if ($objModels === null)
-        {
-            return false;
-        }
-
-        while ($objModels->next())
-        {
-            if (!file_exists(TL_ROOT . '/' . $objModels->path))
-            {
-                continue;
-            }
-
-            $font = \TCPDF_FONTS::addTTFfont(TL_ROOT . '/' . $objModels->path, 'TrueTypeUnicode', '', 96);
-            $pdf->SetFont($font, '', $this->objModel->share_pdfFontSize ? $this->objModel->share_pdfFontSize : 13, false);
-        }
-    }
-
 
     /**
      * Set an object property

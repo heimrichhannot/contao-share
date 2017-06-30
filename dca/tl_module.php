@@ -20,7 +20,7 @@ $dc['palettes']['__selector__'][] = 'addShare';
 /**
  * Subpalettes
  */
-$dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
+$dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfRenderer,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
 
 $arrFields = [
     'addShare'             => [
@@ -45,6 +45,14 @@ $arrFields = [
         'inputType'        => 'select',
         'options_callback' => ['HeimrichHannot\Share\Backend\Module', 'getPrintSoloTemplates'],
         'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
+        'sql'              => "varchar(64) NOT NULL default ''",
+    ],
+    'share_pdfRenderer' => [
+        'label'            => &$GLOBALS['TL_LANG']['tl_module']['share_pdfRenderer'],
+        'exclude'          => true,
+        'inputType'        => 'select',
+        'options'          => ['tcpdf', 'mpdf'],
+        'eval'             => ['includeBlankOption' => false, 'chosen' => true, 'tl_class' => 'w50'],
         'sql'              => "varchar(64) NOT NULL default ''",
     ],
     'share_pdfCssSRC'      => [

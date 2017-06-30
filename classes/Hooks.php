@@ -15,9 +15,11 @@ class Hooks
     /**
      * Support share print for modules
      *
-     * @param \ModuleModel $objRow
+     * @param \ModuleModel $objModel
      * @param string       $strBuffer
      * @param \Module      $objModule
+     *
+     * @return string | Outputbuffer
      */
     public static function getFrontendModuleHook(\ModuleModel $objModel, $strBuffer, \Module $objModule)
     {
@@ -25,7 +27,6 @@ class Hooks
         {
             return $strBuffer;
         }
-
         return Share::renderPrintableModule($objModel, $strBuffer, $objModule);
     }
 
