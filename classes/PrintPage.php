@@ -126,9 +126,6 @@ class PrintPage extends \PageRegular
         $this->Template->buffer = $this->getBuffer();
 
         $this->generateHead($objPage);
-
-        $this->Template->head = \Template::generateInlineScript($strScript, $objPage->outputFormat != 'html5');
-
         return $this->generateOutput($blnCheckRequest);
     }
 
