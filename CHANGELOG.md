@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.2] - 2017-07-03
+
+### Fixed
+- print dialog not opening
+
 ## [1.2.1] - 2017-07-03
 
 ### Fixed
