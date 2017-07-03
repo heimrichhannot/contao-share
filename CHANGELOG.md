@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.3] - 2017-07-03
+
+### Added
+- generateSocialLink Method to `Share` with Contao-version check
+
+### Fixed
+- not working share links in contao 4
+
+### Changed
+- renamed some variables to make code more readable
+
 ## [1.2.2] - 2017-07-03
 
 ### Fixed
