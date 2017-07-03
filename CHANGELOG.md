@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2017-07-03
+
+### Fixed
+- call renderPrintModule instead of pdf
+- composer typo
+
 ## [1.2.0] - 2017-06-29
 
 ### Added

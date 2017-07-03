@@ -10,6 +10,8 @@
 
 namespace HeimrichHannot\Share;
 
+use HeimrichHannot\Request\Request;
+
 class Hooks
 {
     /**
@@ -19,7 +21,7 @@ class Hooks
      * @param string       $strBuffer
      * @param \Module      $objModule
      *
-     * @return string | Outputbuffer
+     * @return string
      */
     public static function getFrontendModuleHook(\ModuleModel $objModel, $strBuffer, \Module $objModule)
     {
@@ -27,7 +29,19 @@ class Hooks
         {
             return $strBuffer;
         }
-        return Share::renderPrintableModule($objModel, $strBuffer, $objModule);
+        else {
+            if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PRINT))
+            {
+                return Share::renderPrintableModule($objModel, $strBuffer, $objModule);
+            }
+            elseif (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PDF))
+            {
+                return Share::renderPDFModule($objModel, $strBuffer, $objModule);
+            }
+            else {
+                return $strBuffer;
+            }
+        }
     }
 
 }

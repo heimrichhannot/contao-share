@@ -389,11 +389,16 @@ class Share extends \Frontend
      */
     public function generatePdf()
     {
+        Share::renderPDFModule($this->objModel, $this->strItem);
+    }
+
+    public static function renderPDFModule($objModel, $strBuffer)
+    {
         ob_clean();
 
         global $objPage;
-        $pdfPage = new PDFPage($this->objModel, $this->strItem);
-        $renderer = $this->objModel->share_pdfRenderer;
+        $pdfPage = new PDFPage($objModel, $strBuffer);
+        $renderer = $objModel->share_pdfRenderer;
         if (!empty($renderer) && $renderer == 'mpdf')
         {
             $pdfPage->mpdf = true;
