@@ -14,7 +14,6 @@ namespace HeimrichHannot\Share;
 
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\Request\Request;
-use HeimrichHannot\Share\TCPDF_CustomPdf;
 
 class Share extends \Frontend
 {
@@ -114,56 +113,27 @@ class Share extends \Frontend
 
     public function generate()
     {
-        // TODO ???  Print the article as PDF
-        /*  if (isset($_GET['pdf'])  && \Input::get('pdf') == $this->objModel->id)
-          {
-              // Backwards compatibility
-              if ($this->objModel->printable == 1)
-              {
-                  $objArticle = new \ModuleArticle($objRow);
-                  $objArticle->generatePdf();
-              }
-              elseif ($this->objModel->printable != '')
-              {
-                  $options = deserialize($objRow->printable);
-
-                  if (is_array($options) && in_array('pdf', $options))
-                  {
-                      $objArticle = new \ModuleArticle($this->objModel);
-                      $objArticle->generatePdf();
-                  }
-              }
-          } //*/
-
-
         // Export iCal
-        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_ICAL)))
+        if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_ICAL))
         {
             $this->generateIcal(\Input::get(Share::SHARE_REQUEST_PARAMETER_ICAL));
-
             return;
         }
 
         // PDF
         if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_PDF)))
         {
-
             $strClass = \Module::findClass($this->objModel->type);
-
             if (!class_exists($strClass))
             {
                 return;
             }
-
             $objModule = new $strClass($this->objModel);
-
             if (!$objModule->addShare)
             {
                 return;
             }
-
             \Input::setGet("pdf", false);  // prevent endless loops, because of generate
-
             $this->strItem = $objModule->generate();
             $this->generatePdf();
         }
@@ -180,8 +150,6 @@ class Share extends \Frontend
         $this->Template->style = !empty($this->arrStyle) ? implode(' ', $this->arrStyle) : '';
         $this->Template->class = trim('share share_' . $this->type . ' ' . $this->cssID[1]);
         $this->Template->cssID = ($this->cssID[0] != '') ? ' id="' . $this->cssID[0] . '"' : '';
-
-
         return $this->Template->parse();
     }
 
@@ -198,8 +166,15 @@ class Share extends \Frontend
         $this->Template->icalUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_ICAL.'='.$this->id);
         $this->Template->icalUrl = Url::addQueryString('title=Termin speichern', $this->Template->icalUrl);
 
-        $this->Template->encUrl   = Url::removeAllParametersFromUri(rawurlencode(\Environment::get('base') . \Environment::get('request')));
-        $this->Template->encTitle = rawurlencode($objPage->pageTitle);
+        $this->rawUrl = Url::removeAllParametersFromUri(rawurlencode(\Environment::get('base') . \Environment::get('request')));
+        $this->rawTitle = rawurlencode($objPage->pageTitle);
+
+        $this->Template->encUrl   = $this->rawUrl;
+        $this->Template->encTitle = $this->rawTitle;
+
+        $this->Template->facebookShareUrl = $this->generateSocialLink("facebook");
+        $this->Template->twitterShareUrl = $this->generateSocialLink("twitter");
+        $this->Template->gplusShareUrl = $this->generateSocialLink("gplus");
 
         $this->Template->printTitle     = specialchars($GLOBALS['TL_LANG']['MSC']['printPage']);
         $this->Template->pdfTitle       = specialchars($GLOBALS['TL_LANG']['MSC']['printAsPdf']);
@@ -406,6 +381,37 @@ class Share extends \Frontend
             $pdfPage->mpdf = true;
         }
         $pdfPage->generate($objPage);
+    }
+
+    public function generateSocialLink($network = null)
+    {
+        $link = '';
+        if (version_compare(VERSION.'.'.BUILD, '4.0', '>=')) {
+            switch ($network) {
+                case "facebook":
+                    $link = 'https://www.facebook.com/sharer/sharer.php?u='.$this->rawUrl.'&amp;t='.$this->rawTitle;
+                    break;
+                case "twitter":
+                    $link = 'https://twitter.com/intent/tweet?url='.$this->rawUrl.'&amp;text='.$this->rawTitle;
+                    break;
+                case "gplus":
+                    $link = 'https://plus.google.com/share?url='.$this->rawUrl.'"';
+                    break;
+            }
+        }
+        else {
+            switch ($network) {
+                case "facebook":
+                    $link = 'share/?p=facebook&amp;u='.$this->rawUrl.'&amp;t='.$this->rawTitle;
+                    break;
+                case "twitter":
+                    $link = 'share/?p=twitter&amp;u='.$this->rawUrl.'&amp;t='.$this->rawTitle;
+                    break;
+                case "gplus":
+                    $link = 'share/?p=gplus&amp;u='.$this->rawUrl.'&amp;t='.$this->rawTitle;
+            }
+        }
+        return $link;
     }
 
     /**
