@@ -193,11 +193,13 @@ class Share extends \Frontend
         // Add syndication variables
         $request = Url::removeAllParametersFromUri(\Environment::get('indexFreeRequest'));
 
-        $this->Template->print    = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PRINT . '=' . $this->id);
+        $this->Template->printUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PRINT . '=' . $this->id);
+        $this->Template->pdfUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PDF.'='.$this->id);
+        $this->Template->icalUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_ICAL.'='.$this->id);
+        $this->Template->icalUrl = Url::addQueryString('title=Termin speichern', $this->Template->icalUrl);
+
         $this->Template->encUrl   = Url::removeAllParametersFromUri(rawurlencode(\Environment::get('base') . \Environment::get('request')));
         $this->Template->encTitle = rawurlencode($objPage->pageTitle);
-        $this->Template->href     = $request . ((strpos($request, '?') !== false) ? '&amp;' : '?') . 'pdf=' . $this->id;
-        $this->Template->ical     = $request . "?ical=" . $this->objCurrent->id . "&title=" . urlencode("Termin speichern");
 
         $this->Template->printTitle     = specialchars($GLOBALS['TL_LANG']['MSC']['printPage']);
         $this->Template->pdfTitle       = specialchars($GLOBALS['TL_LANG']['MSC']['printAsPdf']);

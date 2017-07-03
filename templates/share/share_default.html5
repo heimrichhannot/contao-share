@@ -5,21 +5,21 @@
 <ul class="share-links list-inline hidden-print">
     <?php if ($this->printButton): ?>
 		<li class="hidden-xs">
-			<a href="<?php echo $this->print; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->printTitle; ?>" target="_blank">
+			<a href="<?php echo $this->printUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->printTitle; ?>" target="_blank">
 				<i class="ei ei-printer"></i><span class="sr-only"><?php echo $this->printTitle; ?></span>
 			</a>
 		</li>
     <?php endif; ?>
     <?php if ($this->pdfButton): ?>
 		<li class="hidden-xs">
-			<a href="<?php echo $this->href; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->pdfTitle; ?>">
+			<a href="<?php echo $this->pdfUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->pdfTitle; ?>">
 				<i class="ei ei-download"></i><span class="sr-only"><?php echo $this->pdfTitle; ?></span>
 			</a>
 		</li>
     <?php endif; ?>
     <?php if ($this->icalButton): ?>
     	<li>
-			<a href="<?php echo $this->ical; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->icalTitle; ?>">
+			<a href="<?php echo $this->icalUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->icalTitle; ?>">
 				<i class="ei ei-calendar"></i><span class="sr-only"><?php echo $this->pdfTitle; ?></span>
 			</a>
 		</li>
