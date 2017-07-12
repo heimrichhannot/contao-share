@@ -44,8 +44,8 @@ $arrLang['share_pdfLogoSize'][1] = 'Hier können Sie die Breite und Höhe des PD
 $arrLang['share_pdfFooterText'][0] = 'Fußzeile';
 $arrLang['share_pdfFooterText'][1] = 'Hier können Sie einen Text für die Fußzeile angeben.';
 
-$arrLang['share_customPrintTpl'][0] = 'Druck-Template auswählen';
-$arrLang['share_customPrintTpl'][1] = 'Wählen Sie ein Druck-Template aus, in das der Inhalt des aktuellen Moduls ausgegeben wird.';
+$arrLang['share_customPrintTpl'][0] = 'Druck- & PDF-Template auswählen';
+$arrLang['share_customPrintTpl'][1] = 'Wählen Sie ein Template für den Druck und die PDF-Generierung aus, in das der Inhalt des aktuellen Moduls ausgegeben wird.';
 
 /**
  * Legends

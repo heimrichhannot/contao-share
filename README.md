@@ -21,6 +21,7 @@ $dc['palettes']['your-module'] = ...{share_legend},addShare;...
 ```
 
 ### Generate share output example
+Use the return value in your module to render share links, if choosen in the module settings.
 
 ```
 protected function generateShare()
@@ -34,6 +35,10 @@ protected function generateShare()
         return null;
     }
 ```
+
+### Custom name for your pdf files
+
+Your module has to implement `ModulePdfReaderInterface`. The return-value of  `getFileName()` is used as pdf file name. Don't add .pdf, it will be added by the module itself.
 
 
 ### Template Syntax

@@ -15,12 +15,21 @@ $dc = &$GLOBALS['TL_DCA']['tl_module'];
  * Palettes
  */
 $dc['palettes']['__selector__'][] = 'addShare';
+$dc['palettes']['__selector__'][] = 'share_pdfRenderer';
 
 
 /**
  * Subpalettes
  */
-$dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfRenderer,share_pdfShowInline,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
+
+// all fields
+//$dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfRenderer,share_pdfShowInline,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
+
+$dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfRenderer';
+
+$dc['subpalettes']['share_pdfRenderer_tcpdf'] = 'share_pdfShowInline,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
+$dc['subpalettes']['share_pdfRenderer_mpdf'] = 'share_pdfShowInline,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSize';
+$dc['subpalettes']['share_pdfRenderer_wkhtmltopdf'] = 'share_pdfShowInline,';
 
 $arrFields = [
     'addShare'             => [
@@ -36,7 +45,7 @@ $arrFields = [
         'inputType' => 'checkboxWizard',
         'reference' => $GLOBALS['TL_LANG']['tl_module']['references']['share_buttons'],
         'options'   => ['pdfButton', 'printButton', 'facebook', 'twitter', 'gplus'],
-        'eval'      => ['multiple' => true, 'mandatory' => true, 'submitOnChange' => true],
+        'eval'      => ['multiple' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true],
         'sql'       => "blob NULL",
     ],
     'share_customPrintTpl' => [
@@ -52,7 +61,7 @@ $arrFields = [
         'exclude'          => true,
         'inputType'        => 'select',
         'options'          => ['tcpdf', 'mpdf','wkhtmltopdf'],
-        'eval'             => ['includeBlankOption' => false, 'chosen' => true, 'tl_class' => 'w50'],
+        'eval'             => ['includeBlankOption' => false, 'chosen' => true, 'tl_class' => 'w50 clr', 'submitOnChange' => true],
         'sql'              => "varchar(64) NOT NULL default ''",
     ],
     'share_pdfShowInline' => [
@@ -74,7 +83,7 @@ $arrFields = [
         'label'     => &$GLOBALS['TL_LANG']['tl_module']['share_pdfLogoSRC'],
         'exclude'   => true,
         'inputType' => 'fileTree',
-        'eval'      => ['filesOnly' => true, 'fieldType' => 'radio', 'tl_class' => 'clr'],
+        'eval'      => ['filesOnly' => true, 'fieldType' => 'radio', 'tl_class' => 'clr w50'],
         'sql'       => "binary(16) NULL",
     ],
     'share_pdfFontSRC'     => [
@@ -89,14 +98,14 @@ $arrFields = [
         'exclude'   => true,
         'inputType' => 'text',
         'default'   => 13,
-        'eval'      => ['maxlength' => 10, 'rgxp' => 'digit'],
+        'eval'      => ['maxlength' => 10, 'rgxp' => 'digit', 'tl_class' => 'w50'],
         'sql'       => "int(10) unsigned NOT NULL default '0'",
     ],
     'share_pdfLogoSize'    => [
         'label'     => &$GLOBALS['TL_LANG']['tl_module']['share_pdfLogoSize'],
         'exclude'   => true,
         'inputType' => 'text',
-        'eval'      => ['multiple' => true, 'size' => 2, 'tl_class' => 'w50 clr', 'rgxp' => 'digit'],
+        'eval'      => ['multiple' => true, 'size' => 2, 'tl_class' => 'w50', 'rgxp' => 'digit'],
         'sql'       => "varchar(255) NOT NULL default ''",
     ],
     'share_pdfFooterText'  => [

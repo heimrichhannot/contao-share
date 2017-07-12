@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.4] - 2017-07-12
+
+### Added
+- wkhtmltopdf for pdf generation
+- option to output pdf inline or as download (for all pdf renderer)
+- ModulePdfInterface for PDF naming
+
+### Changed
+- PDF-Options in the backend will only show up, if the pdf renderer support the options
+
 ## [1.2.3] - 2017-07-03
 
 ### Added
