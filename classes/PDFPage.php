@@ -12,24 +12,69 @@
 namespace HeimrichHannot\Share;
 
 
+use Knp\Snappy\Pdf;
+
 class PDFPage extends PrintPage
 {
-
-
+    protected $fileName = 'download';
+    protected $outputInline = true;
+    protected $renderer = 'tcpdf';
 
     public function __construct($objModel, $strBuffer, array $arrConfig = [])
     {
         $this->objModel = $objModel;
         $strTemplate = $this->objModel->share_customPrintTpl;
-        $this->mpdf = false;
-        parent::__construct($strTemplate, $strBuffer, $arrConfig);
 
+        $renderer = $objModel->share_pdfRenderer;
+        if (!empty($renderer))
+        {
+            $this->renderer = $renderer;
+        }
+
+        parent::__construct($strTemplate, $strBuffer, $arrConfig);
     }
+
+    /**
+     * @return string
+     */
+    public function getFileName(): string
+    {
+        return $this->fileName;
+    }
+
+    /**
+     * @param string $fileName
+     */
+    public function setFileName(string $fileName)
+    {
+        $this->fileName = $fileName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getOutputInline(): bool
+    {
+        return $this->outputInline;
+    }
+
+    /**
+     * Set if the PDF output should be inline or download
+     * @param bool $outputInline
+     */
+    public function setOutputInline(bool $outputInline)
+    {
+        $this->outputInline = $outputInline;
+    }
+
+
+
 
     protected function generateHead($objPage)
     {
         return;
     }
+
     protected function generateOutput ($blnCheckRequest)
     {
         return $this->generatePDF($this->Template->getResponse()->getContent());
@@ -50,7 +95,21 @@ class PDFPage extends PrintPage
         $strArticle = preg_replace('/(?<=src=\")https:/xsi', 'http:', $strArticle);
 
 
-        if ($this->mpdf === true)
+
+
+        if ($this->renderer == 'wkhtmltopdf') {
+            $pdf = new Pdf(TL_ROOT.'/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
+            $outputInline = $this->getOutputInline() ? "inline" : "attachment";
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: '.$outputInline.'; filename="'.$this->getFileName().'.pdf"');
+            echo $pdf->getOutputFromHtml($strArticle);
+        }
+
+
+
+
+
+        if ($this->renderer === 'mpdf')
         {
             $pdf = new \mPDF();
             // Add an custom logo
@@ -73,7 +132,7 @@ class PDFPage extends PrintPage
                     $pdf->orig_tMargin = $this->objModel->share_pdfFontSize;
                     $pdf->margin_header = $this->objModel->share_pdfFontSize;
 //                    $pdf->margin_header = $imgHeight + $this->objModel->share_pdfFontSize;
-                    $pdf->setAutoTopMargin = pad;
+                    $pdf->setAutoTopMargin = 'pad';
 
                     $pdf->SetHTMLHeader('<img src="'.$objModel->path.'" width="'.$imgWidth.'" height="'.$imgHeight.'" style="margin: 0 2em 0 2em">');
 
@@ -82,7 +141,8 @@ class PDFPage extends PrintPage
             }
 
             $pdf->WriteHTML($strArticle, 0);
-            $pdf->Output();
+            $outputInline = $this->getOutputInline() ? "I" : "D";
+            $pdf->Output($this->getFileName().'.pdf', $outputInline);
         }
 
         // Remove form elements and JavaScript links and scripts
@@ -249,7 +309,14 @@ class PDFPage extends PrintPage
 
         // Close and output PDF document
         $pdf->lastPage();
-        $pdf->Output(standardize(ampersand($this->objCurrent->title, false)) . '.pdf', 'D');
+
+        $title = $this->getFileName();
+        // Unterstützung älterer Integrationen
+        if (!empty($this->objCurrent->title)) {
+            $title = standardize(ampersand($this->objCurrent->title, false));
+        }
+        $outputInline = $this->getOutputInline() ? "I" : "D";
+        $pdf->Output( $title . '.pdf', $outputInline);
 
         // Stop script execution
         exit;

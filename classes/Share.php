@@ -28,8 +28,8 @@ class Share extends \Frontend
     protected $socialShare = false;
 
     const SHARE_REQUEST_PARAMETER_PRINT = 'print';
-    const SHARE_REQUEST_PARAMETER_PDF = 'pdf';
-    const SHARE_REQUEST_PARAMETER_ICAL = 'ical';
+    const SHARE_REQUEST_PARAMETER_PDF   = 'pdf';
+    const SHARE_REQUEST_PARAMETER_ICAL  = 'ical';
 
     public function __construct($objModule, $objCurrent)
     {
@@ -117,6 +117,7 @@ class Share extends \Frontend
         if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_ICAL))
         {
             $this->generateIcal(\Input::get(Share::SHARE_REQUEST_PARAMETER_ICAL));
+
             return;
         }
 
@@ -150,6 +151,7 @@ class Share extends \Frontend
         $this->Template->style = !empty($this->arrStyle) ? implode(' ', $this->arrStyle) : '';
         $this->Template->class = trim('share share_' . $this->type . ' ' . $this->cssID[1]);
         $this->Template->cssID = ($this->cssID[0] != '') ? ' id="' . $this->cssID[0] . '"' : '';
+
         return $this->Template->parse();
     }
 
@@ -162,19 +164,19 @@ class Share extends \Frontend
         $request = Url::removeAllParametersFromUri(\Environment::get('indexFreeRequest'));
 
         $this->Template->printUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PRINT . '=' . $this->id);
-        $this->Template->pdfUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PDF.'='.$this->id);
-        $this->Template->icalUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_ICAL.'='.$this->id);
-        $this->Template->icalUrl = Url::addQueryString('title=Termin speichern', $this->Template->icalUrl);
+        $this->Template->pdfUrl   = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PDF . '=' . $this->id);
+        $this->Template->icalUrl  = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_ICAL . '=' . $this->id);
+        $this->Template->icalUrl  = Url::addQueryString('title=Termin speichern', $this->Template->icalUrl);
 
-        $this->rawUrl = Url::removeAllParametersFromUri(rawurlencode(\Environment::get('base') . \Environment::get('request')));
+        $this->rawUrl   = Url::removeAllParametersFromUri(rawurlencode(\Environment::get('base') . \Environment::get('request')));
         $this->rawTitle = rawurlencode($objPage->pageTitle);
 
         $this->Template->encUrl   = $this->rawUrl;
         $this->Template->encTitle = $this->rawTitle;
 
         $this->Template->facebookShareUrl = $this->generateSocialLink("facebook");
-        $this->Template->twitterShareUrl = $this->generateSocialLink("twitter");
-        $this->Template->gplusShareUrl = $this->generateSocialLink("gplus");
+        $this->Template->twitterShareUrl  = $this->generateSocialLink("twitter");
+        $this->Template->gplusShareUrl    = $this->generateSocialLink("gplus");
 
         $this->Template->printTitle     = specialchars($GLOBALS['TL_LANG']['MSC']['printPage']);
         $this->Template->pdfTitle       = specialchars($GLOBALS['TL_LANG']['MSC']['printAsPdf']);
@@ -369,16 +371,23 @@ class Share extends \Frontend
         Share::renderPDFModule($this->objModel, $this->strItem);
     }
 
-    public static function renderPDFModule($objModel, $strBuffer)
+    public static function renderPDFModule($objModel, $strBuffer, $objModule)
     {
+        $strFileName = null;
+
+        if ($objModule instanceof ModulePdfReaderInterface)
+        {
+            $strFileName = $objModule->getFileName();
+        }
+
         ob_clean();
 
         global $objPage;
         $pdfPage = new PDFPage($objModel, $strBuffer);
-        $renderer = $objModel->share_pdfRenderer;
-        if (!empty($renderer) && $renderer == 'mpdf')
+
+        if (!empty($strFileName))
         {
-            $pdfPage->mpdf = true;
+            $pdfPage->setFileName($strFileName);
         }
         $pdfPage->generate($objPage);
     }
@@ -386,31 +395,36 @@ class Share extends \Frontend
     public function generateSocialLink($network = null)
     {
         $link = '';
-        if (version_compare(VERSION.'.'.BUILD, '4.0', '>=')) {
-            switch ($network) {
+        if (version_compare(VERSION . '.' . BUILD, '4.0', '>='))
+        {
+            switch ($network)
+            {
                 case "facebook":
-                    $link = 'https://www.facebook.com/sharer/sharer.php?u='.$this->rawUrl.'&amp;t='.$this->rawTitle;
+                    $link = 'https://www.facebook.com/sharer/sharer.php?u=' . $this->rawUrl . '&amp;t=' . $this->rawTitle;
                     break;
                 case "twitter":
-                    $link = 'https://twitter.com/intent/tweet?url='.$this->rawUrl.'&amp;text='.$this->rawTitle;
+                    $link = 'https://twitter.com/intent/tweet?url=' . $this->rawUrl . '&amp;text=' . $this->rawTitle;
                     break;
                 case "gplus":
-                    $link = 'https://plus.google.com/share?url='.$this->rawUrl.'"';
+                    $link = 'https://plus.google.com/share?url=' . $this->rawUrl . '"';
                     break;
             }
         }
-        else {
-            switch ($network) {
+        else
+        {
+            switch ($network)
+            {
                 case "facebook":
-                    $link = 'share/?p=facebook&amp;u='.$this->rawUrl.'&amp;t='.$this->rawTitle;
+                    $link = 'share/?p=facebook&amp;u=' . $this->rawUrl . '&amp;t=' . $this->rawTitle;
                     break;
                 case "twitter":
-                    $link = 'share/?p=twitter&amp;u='.$this->rawUrl.'&amp;t='.$this->rawTitle;
+                    $link = 'share/?p=twitter&amp;u=' . $this->rawUrl . '&amp;t=' . $this->rawTitle;
                     break;
                 case "gplus":
-                    $link = 'share/?p=gplus&amp;u='.$this->rawUrl.'&amp;t='.$this->rawTitle;
+                    $link = 'share/?p=gplus&amp;u=' . $this->rawUrl . '&amp;t=' . $this->rawTitle;
             }
         }
+
         return $link;
     }
 

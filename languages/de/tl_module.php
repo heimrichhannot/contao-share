@@ -23,6 +23,9 @@ $arrLang['share_buttons'][1] = 'Bitte wählen Sie die Syndikationen aus.';
 $arrLang['share_pdfRenderer'][0] = 'PDF-Renderer auswählen';
 $arrLang['share_pdfRenderer'][1] = 'Bitte wählen Sie eine Bibliothek zur Erzeugung der PDF-Datei aus.';
 
+$arrLang['share_pdfShowInline'][0] = 'PDF-Inline darstellen';
+$arrLang['share_pdfShowInline'][1] = 'Wenn Sie diese Option auswählen, wird die PDF direkt im Browser angezeigt, ansonsten wird ein Download gestartet.';
+
 $arrLang['share_pdfLogoSRC'][0] = 'PDF-Logo Quelldatei';
 $arrLang['share_pdfLogoSRC'][1] = 'Bitte wählen Sie eine Datei aus der Dateiübersicht aus.';
 

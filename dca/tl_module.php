@@ -20,7 +20,7 @@ $dc['palettes']['__selector__'][] = 'addShare';
 /**
  * Subpalettes
  */
-$dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfRenderer,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
+$dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfRenderer,share_pdfShowInline,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
 
 $arrFields = [
     'addShare'             => [
@@ -36,7 +36,7 @@ $arrFields = [
         'inputType' => 'checkboxWizard',
         'reference' => $GLOBALS['TL_LANG']['tl_module']['references']['share_buttons'],
         'options'   => ['pdfButton', 'printButton', 'facebook', 'twitter', 'gplus'],
-        'eval'      => ['multiple' => true, 'mandatory' => true],
+        'eval'      => ['multiple' => true, 'mandatory' => true, 'submitOnChange' => true],
         'sql'       => "blob NULL",
     ],
     'share_customPrintTpl' => [
@@ -51,9 +51,17 @@ $arrFields = [
         'label'            => &$GLOBALS['TL_LANG']['tl_module']['share_pdfRenderer'],
         'exclude'          => true,
         'inputType'        => 'select',
-        'options'          => ['tcpdf', 'mpdf'],
+        'options'          => ['tcpdf', 'mpdf','wkhtmltopdf'],
         'eval'             => ['includeBlankOption' => false, 'chosen' => true, 'tl_class' => 'w50'],
         'sql'              => "varchar(64) NOT NULL default ''",
+    ],
+    'share_pdfShowInline' => [
+        'label'                   => &$GLOBALS['TL_LANG']['tl_module']['share_pdfShowInline'],
+        'exclude'                 => true,
+        'inputType'               => 'checkbox',
+        'default'                 => '1',
+        'eval'                    => ['chosen' => true, 'tl_class' => 'w50'],
+        'sql'                     => "char(1) NOT NULL default '1'"
     ],
     'share_pdfCssSRC'      => [
         'label'     => &$GLOBALS['TL_LANG']['tl_module']['share_pdfCssSRC'],

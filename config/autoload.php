@@ -31,7 +31,11 @@ ClassLoader::addClasses(array
 	'HeimrichHannot\Share\Share'                  => 'system/modules/share/classes/Share.php',
 	'HeimrichHannot\Share\Backend\Module'         => 'system/modules/share/classes/backend/Module.php',
 	'HeimrichHannot\Share\PrintPage'              => 'system/modules/share/classes/PrintPage.php',
+	'HeimrichHannot\Share\PDFPage'                => 'system/modules/share/classes/PDFPage.php',
 	'HeimrichHannot\Share\TCPDF_CustomPdf'        => 'system/modules/share/classes/TCPDF_CustomPdf.php',
+
+    // Interfaces
+    'HeimrichHannot\Share\ModulePdfReaderInterface' => 'system/modules/share/classes/ModulePdfReaderInterface.php'
 ));
 
 
