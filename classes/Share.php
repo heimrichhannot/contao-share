@@ -373,6 +373,10 @@ class Share extends \Frontend
 
     public static function renderPDFModule($objModel, $strBuffer, $objModule)
     {
+        if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $objModel->id)
+        {
+            return $strBuffer;
+        }
         $strFileName = null;
 
         if ($objModule instanceof ModulePdfReaderInterface)
