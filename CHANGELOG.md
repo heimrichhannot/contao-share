@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.5] - 2017-07-14
+
+### Fixed
+- wrong pdf print template with multiple share instances
+
 ## [1.2.4] - 2017-07-12
 
 ### Added
