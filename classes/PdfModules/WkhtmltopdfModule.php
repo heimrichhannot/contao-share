@@ -16,7 +16,7 @@ use HeimrichHannot\Share\PdfModule;
 use HeimrichHannot\Share\PdfModuleInterface;
 use Knp\Snappy\Pdf;
 
-class WkhtmltopdfModule implements PdfModuleInterface
+class WkhtmltopdfModule extends PdfModule
 {
     protected $pdf;
     protected $inline = true;
@@ -27,7 +27,6 @@ class WkhtmltopdfModule implements PdfModuleInterface
     {
         $this->pdf = new Pdf(TL_ROOT.'/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
     }
-
 
     /**
      * @param $inline bool Display PDF inline or not (e.g. download it)
@@ -41,16 +40,6 @@ class WkhtmltopdfModule implements PdfModuleInterface
             $this->inline = $inline;
         }
         return $this->inline;
-    }
-
-    /**
-     * @param $size int Font size
-     *
-     * @return mixed true if set successfully, null if not support
-     */
-    public function setFontSize($size)
-    {
-        return null;
     }
 
     /**

@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added 
 - started decoubling pdf renderer
-- wkhtmltopdf module class
-- PdfModule Interface 
+- WkhtmltopdfModule class
+- PdfModule class 
 - added authentication option to wkhtmltopdf
 
 ### Fixed 
