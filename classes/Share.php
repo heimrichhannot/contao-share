@@ -23,6 +23,7 @@ class Share extends \Frontend
 
     protected $arrData    = [];
     protected $objModel   = null;
+    protected $objModule  = null;
     protected $objCurrent = null;
 
     protected $socialShare = false;
@@ -41,6 +42,7 @@ class Share extends \Frontend
         {
             $this->objModel = $objModule->current();
         }
+        $this->objModule = $objModule;
 
         parent::__construct();
 
@@ -368,7 +370,7 @@ class Share extends \Frontend
      */
     public function generatePdf()
     {
-        Share::renderPDFModule($this->objModel, $this->strItem);
+        Share::renderPDFModule($this->objModel, $this->strItem, $this->objModule);
     }
 
     public static function renderPDFModule($objModel, $strBuffer, $objModule)

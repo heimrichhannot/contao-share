@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.6] - 2017-07-17
+
+### Fixed 
+- missing attribute in Share->generatePDF
+
+
 ## [1.2.5] - 2017-07-14
 
 ### Fixed
