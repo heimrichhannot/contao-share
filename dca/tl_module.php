@@ -29,7 +29,7 @@ $dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfRe
 
 $dc['subpalettes']['share_pdfRenderer_tcpdf'] = 'share_pdfShowInline,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
 $dc['subpalettes']['share_pdfRenderer_mpdf'] = 'share_pdfShowInline,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSize';
-$dc['subpalettes']['share_pdfRenderer_wkhtmltopdf'] = 'share_pdfShowInline,';
+$dc['subpalettes']['share_pdfRenderer_wkhtmltopdf'] = 'share_pdfShowInline,share_pdfUsername,share_pdfPassword';
 
 $arrFields = [
     'addShare'             => [
@@ -115,7 +115,22 @@ $arrFields = [
         'eval'      => ['tl_class' => 'clr'],
         'sql'       => "mediumtext NULL",
     ],
-
+    'share_pdfUsername'    => [
+        'label'     => &$GLOBALS['TL_LANG']['tl_module']['share_pdfUsername'],
+        'exclude'   => true,
+        'inputType' => 'text',
+        'default'   => 13,
+        'eval'      => ['tl_class' => 'w50 clr'],
+        'sql'       => "varchar(50) NOT NULL default ''",
+    ],
+    'share_pdfPassword'    => [
+        'label'     => &$GLOBALS['TL_LANG']['tl_module']['share_pdfPassword'],
+        'exclude'   => true,
+        'inputType' => 'text',
+        'default'   => 13,
+        'eval'      => ['tl_class' => 'w50', 'maxlength' => '50'],
+        'sql'       => "varchar(50) NOT NULL default ''",
+    ],
 ];
 
 $dc['fields'] = array_merge($dc['fields'], $arrFields);

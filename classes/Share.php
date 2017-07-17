@@ -14,6 +14,7 @@ namespace HeimrichHannot\Share;
 
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\Request\Request;
+use HeimrichHannot\Share\PdfModule\WkhtmltopdfModule;
 
 class Share extends \Frontend
 {
@@ -115,6 +116,14 @@ class Share extends \Frontend
 
     public function generate()
     {
+        if (Request::hasGet(static::SHARE_REQUEST_PARAMETER_PDF)) {
+            if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $this->objModel->id)
+            {
+                return;
+            }
+        }
+
+
         // Export iCal
         if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_ICAL))
         {
@@ -124,22 +133,22 @@ class Share extends \Frontend
         }
 
         // PDF
-        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_PDF)))
-        {
-            $strClass = \Module::findClass($this->objModel->type);
-            if (!class_exists($strClass))
-            {
-                return;
-            }
-            $objModule = new $strClass($this->objModel);
-            if (!$objModule->addShare)
-            {
-                return;
-            }
-            \Input::setGet("pdf", false);  // prevent endless loops, because of generate
-            $this->strItem = $objModule->generate();
-            $this->generatePdf();
-        }
+//        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_PDF)))
+//        {
+//            $strClass = \Module::findClass($this->objModel->type);
+//            if (!class_exists($strClass))
+//            {
+//                return;
+//            }
+//            $objModule = new $strClass($this->objModel);
+//            if (!$objModule->addShare)
+//            {
+//                return;
+//            }
+//            \Input::setGet("pdf", false);  // prevent endless loops, because of generate
+//            $this->strItem = $objModule->generate();
+//            $this->generatePdf();
+//        }
 
 
         // Render share buttons
@@ -377,7 +386,7 @@ class Share extends \Frontend
     {
         if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $objModel->id)
         {
-            return $strBuffer;
+            return ;
         }
         $strFileName = null;
 
@@ -394,6 +403,12 @@ class Share extends \Frontend
         if (!empty($strFileName))
         {
             $pdfPage->setFileName($strFileName);
+        }
+        if (isset($objModel->share_pdfUsername)) {
+            $pdfPage->setLoginUsername($objModel->share_pdfUsername);
+        }
+        if (isset($objModel->share_pdfPassword)) {
+            $pdfPage->setLoginPassword($objModel->share_pdfPassword);
         }
         $pdfPage->generate($objPage);
     }

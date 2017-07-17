@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ## [1.2.6] - 2017-07-17
 
+### Added 
+- started decoubling pdf renderer
+- wkhtmltopdf module class
+- PdfModule Interface 
+- added authentication option to wkhtmltopdf
+
 ### Fixed 
 - missing attribute in Share->generatePDF
 

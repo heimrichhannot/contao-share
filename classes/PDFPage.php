@@ -12,6 +12,7 @@
 namespace HeimrichHannot\Share;
 
 
+use HeimrichHannot\Share\PdfModule\WkhtmltopdfModule;
 use Knp\Snappy\Pdf;
 
 class PDFPage extends PrintPage
@@ -19,6 +20,8 @@ class PDFPage extends PrintPage
     protected $fileName = 'download';
     protected $outputInline = true;
     protected $renderer = 'tcpdf';
+    protected $loginUsername = '';
+    protected $loginPassword = '';
 
     public function __construct($objModel, $strBuffer, array $arrConfig = [])
     {
@@ -67,8 +70,21 @@ class PDFPage extends PrintPage
         $this->outputInline = $outputInline;
     }
 
+    /**
+     * @param string $loginUsername
+     */
+    public function setLoginUsername($loginUsername)
+    {
+        $this->loginUsername = $loginUsername;
+    }
 
-
+    /**
+     * @param string $loginPassword
+     */
+    public function setLoginPassword($loginPassword)
+    {
+        $this->loginPassword = $loginPassword;
+    }
 
     protected function generateHead($objPage)
     {
@@ -95,19 +111,14 @@ class PDFPage extends PrintPage
         $strArticle = preg_replace('/(?<=src=\")https:/xsi', 'http:', $strArticle);
 
 
-
-
         if ($this->renderer == 'wkhtmltopdf') {
-            $pdf = new Pdf(TL_ROOT.'/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
-            $outputInline = $this->getOutputInline() ? "inline" : "attachment";
-            header('Content-Type: application/pdf');
-            header('Content-Disposition: '.$outputInline.'; filename="'.$this->getFileName().'.pdf"');
-            echo $pdf->getOutputFromHtml($strArticle);
+            $pdf = new WkhtmltopdfModule();
+            $pdf->setInline($this->getOutputInline());
+            $pdf->setFileName($this->getFileName());
+            $pdf->addHtmlContent($strArticle);
+            $pdf->setLoginInformation($this->loginUsername, $this->loginPassword);
+            $pdf->compile();
         }
-
-
-
-
 
         if ($this->renderer === 'mpdf')
         {

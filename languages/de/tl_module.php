@@ -47,6 +47,12 @@ $arrLang['share_pdfFooterText'][1] = 'Hier können Sie einen Text für die Fußz
 $arrLang['share_customPrintTpl'][0] = 'Druck- & PDF-Template auswählen';
 $arrLang['share_customPrintTpl'][1] = 'Wählen Sie ein Template für den Druck und die PDF-Generierung aus, in das der Inhalt des aktuellen Moduls ausgegeben wird.';
 
+$arrLang['share_pdfUsername'][0] = 'Authentifizierungsbenutzername';
+$arrLang['share_pdfUsername'][1] = 'Falls Sie Daten (Bilder,CSS) von einer Seite laden wollen, welche mit einen Passwort (HTTP Basic Authentication) geschützt ist, können Sie hier die Benutzerdaten eintragen.';
+
+$arrLang['share_pdfPassword'][0] = 'Authentifizierungspassword';
+$arrLang['share_pdfPassword'][1] = 'Siehe Authentifizierungsbenutzername.';
+
 /**
  * Legends
  */
