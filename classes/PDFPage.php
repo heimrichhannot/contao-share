@@ -12,6 +12,7 @@
 namespace HeimrichHannot\Share;
 
 
+use HeimrichHannot\Share\PdfModule\MpdfModule;
 use HeimrichHannot\Share\PdfModule\WkhtmltopdfModule;
 use Knp\Snappy\Pdf;
 
@@ -111,8 +112,15 @@ class PDFPage extends PrintPage
         $strArticle = preg_replace('/(?<=src=\")https:/xsi', 'http:', $strArticle);
 
 
-        if ($this->renderer == 'wkhtmltopdf') {
-            $pdf = new WkhtmltopdfModule();
+        if ($this->renderer == 'wkhtmltopdf' || $this->renderer == 'mpdf') {
+            switch ($this->renderer) {
+                case 'wkhtmltopdf':
+                    $pdf = new WkhtmltopdfModule();
+                    break;
+                case 'mpdf':
+                    $pdf = new MpdfModule();
+                    break;
+            }
             $pdf->setInline($this->getOutputInline());
             $pdf->setFileName($this->getFileName());
             $pdf->addHtmlContent($strArticle);
