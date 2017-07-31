@@ -9,6 +9,7 @@ A helper module for pdf-print, print and social share functionality based on boo
 - pdf-print-button
 - print-button
 - ical-event-button
+- mailto-button
 - dropdown menu with facebook/twitter/googleplus share
 
 ## Usage

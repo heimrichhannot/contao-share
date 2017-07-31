@@ -77,21 +77,12 @@ abstract class PdfModule
     }
 
     /**
-     * Add Html content to render
-     *
-     * @param $content string
-     *
-     * @return mixed true if added successfully, null if not supported
-     */
-    public function addHtmlContent($content)
-    {
-        return null;
-    }
-
-    /**
      * Render the PDF file and output it
      *
      */
-    abstract public function compile ();
+    public function compile ()
+    {
+
+    }
 
 }

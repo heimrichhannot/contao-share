@@ -25,4 +25,31 @@ class Module extends \Backend
         return \Controller::getTemplateGroup('share_print');
     }
 
+    public function modifyPalette(\DataContainer $objDc)
+    {
+        $objModule = \ModuleModel::findByPk($objDc->id);
+        $arrDca = &$GLOBALS['TL_DCA']['tl_module'];
+
+        if ($objModule->addShare)
+        {
+            $arrButtons = deserialize($objModule->share_buttons, true);
+
+            if (in_array('mailto', $arrButtons))
+            {
+                $arrDca['palettes'][$objModule->type] = str_replace('addShare', 'addShare,share_mailtoSubject', $arrDca['palettes'][$objModule->type]);
+            }
+
+            if (in_array('pdfButton', $arrButtons))
+            {
+                $arrDca['palettes'][$objModule->type] = str_replace('addShare', 'addShare,share_customPrintTpl,share_pdfRenderer', $arrDca['palettes'][$objModule->type]);
+            }
+
+            if (in_array('printButton', $arrButtons))
+            {
+                $arrDca['palettes'][$objModule->type] = str_replace('share_customPrintTpl', '', $arrDca['palettes'][$objModule->type]);
+                $arrDca['palettes'][$objModule->type] = str_replace('addShare', 'addShare,share_customPrintTpl', $arrDca['palettes'][$objModule->type]);
+            }
+        }
+    }
+
 }

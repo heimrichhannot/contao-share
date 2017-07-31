@@ -17,6 +17,13 @@
 			</a>
 		</li>
     <?php endif; ?>
+    <?php if ($this->mailtoButton): ?>
+        <li>
+            <a href="<?php echo $this->mailto; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->mailtoTitle; ?>">
+                <i class="ei ei-comment_alt"></i><span class="sr-only"><?php echo $this->mailtoTitle; ?></span>
+            </a>
+        </li>
+    <?php endif; ?>
     <?php if ($this->icalButton): ?>
     	<li>
 			<a href="<?php echo $this->icalUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->icalTitle; ?>">

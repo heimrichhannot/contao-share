@@ -90,6 +90,7 @@ class Share extends \Frontend
             case 'newsreader_plus':
                 $this->pdfButton   = true;
                 $this->printButton = true;
+                $this->mailto      = true;
                 $this->facebook    = true;
                 $this->twitter     = true;
                 $this->gplus       = true;
@@ -98,6 +99,7 @@ class Share extends \Frontend
             case 'eventreader_plus':
                 $this->pdfButton   = true;
                 $this->printButton = true;
+                $this->mailto      = true;
                 $this->icalButton  = true;
                 $this->facebook    = true;
                 $this->twitter     = true;
@@ -106,6 +108,7 @@ class Share extends \Frontend
             default:
                 $this->pdfButton   = true;
                 $this->printButton = true;
+                $this->mailto      = true;
                 $this->icalButton  = false;
                 $this->facebook    = true;
                 $this->twitter     = true;
@@ -179,11 +182,15 @@ class Share extends \Frontend
         $this->Template->icalUrl  = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_ICAL . '=' . $this->id);
         $this->Template->icalUrl  = Url::addQueryString('title=Termin speichern', $this->Template->icalUrl);
 
-        $this->rawUrl   = Url::removeAllParametersFromUri(rawurlencode(\Environment::get('base') . \Environment::get('request')));
-        $this->rawTitle = rawurlencode($objPage->pageTitle);
+        $this->rawUrl   = Url::getCurrentUrl();
+        $this->rawTitle = html_entity_decode($objPage->pageTitle ?: $this->objCurrent->headline ?: $this->objCurrent->title);
 
-        $this->Template->encUrl   = $this->rawUrl;
-        $this->Template->encTitle = $this->rawTitle;
+        $this->Template->encUrl   = rawurlencode($this->rawUrl);
+        $this->Template->encTitle = rawurlencode($this->rawTitle);
+
+        $strSubject = sprintf($this->share_mailtoSubject, $this->Template->encTitle) ?: $this->Template->encTitle;
+        $this->Template->mailto = 'mailto:&subject=' . $strSubject . '&body=' . $this->Template->encUrl;
+        $this->Template->mailtoButton = $this->mailto;
 
         $this->Template->facebookShareUrl = $this->generateSocialLink("facebook");
         $this->Template->twitterShareUrl  = $this->generateSocialLink("twitter");
@@ -191,6 +198,7 @@ class Share extends \Frontend
 
         $this->Template->printTitle     = specialchars($GLOBALS['TL_LANG']['MSC']['printPage']);
         $this->Template->pdfTitle       = specialchars($GLOBALS['TL_LANG']['MSC']['printAsPdf']);
+        $this->Template->mailtoTitle    = specialchars($GLOBALS['TL_LANG']['MSC']['mailtoTitle']);
         $this->Template->facebookTitle  = specialchars($GLOBALS['TL_LANG']['MSC']['facebookShare']);
         $this->Template->twitterTitle   = specialchars($GLOBALS['TL_LANG']['MSC']['twitterShare']);
         $this->Template->gplusTitle     = specialchars($GLOBALS['TL_LANG']['MSC']['gplusShare']);

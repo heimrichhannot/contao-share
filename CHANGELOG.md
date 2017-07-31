@@ -1,15 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2017-07-31
+
+### Added
+- mailto-syndication
+- refactoring of palette handling
+- fixed url encoding
+
 ## [1.2.6] - 2017-07-17
 
-### Added 
+### Added
 - started decoubling pdf renderer
 - WkhtmltopdfModule class
 - PdfModule class 
 - added authentication option to wkhtmltopdf
 
-### Fixed 
+### Fixed
 - missing attribute in Share->generatePDF
 
 

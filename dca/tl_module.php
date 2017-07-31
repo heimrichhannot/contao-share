@@ -9,27 +9,31 @@
  * @license http://www.gnu.org/licences/lgpl-3.0.html LGPL
  */
 
-$dc = &$GLOBALS['TL_DCA']['tl_module'];
+$arrDca = &$GLOBALS['TL_DCA']['tl_module'];
+
+/**
+ * Callbacks
+ */
+$arrDca['config']['onload_callback'][] = ['HeimrichHannot\Share\Backend\Module', 'modifyPalette'];
 
 /**
  * Palettes
  */
-$dc['palettes']['__selector__'][] = 'addShare';
-$dc['palettes']['__selector__'][] = 'share_pdfRenderer';
-
+$arrDca['palettes']['__selector__'][] = 'addShare';
+$arrDca['palettes']['__selector__'][] = 'share_pdfRenderer';
 
 /**
  * Subpalettes
  */
+$arrDca['subpalettes']['addShare'] = 'share_buttons';
 
-// all fields
-//$dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfRenderer,share_pdfShowInline,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
+$arrDca['subpalettes']['share_pdfRenderer_tcpdf'] = 'share_pdfShowInline,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
+$arrDca['subpalettes']['share_pdfRenderer_mpdf'] = 'share_pdfShowInline,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSize';
+$arrDca['subpalettes']['share_pdfRenderer_wkhtmltopdf'] = 'share_pdfShowInline,share_pdfUsername,share_pdfPassword';
 
-$dc['subpalettes']['addShare'] = 'share_buttons,share_customPrintTpl,share_pdfRenderer';
-
-$dc['subpalettes']['share_pdfRenderer_tcpdf'] = 'share_pdfShowInline,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
-$dc['subpalettes']['share_pdfRenderer_mpdf'] = 'share_pdfShowInline,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSize';
-$dc['subpalettes']['share_pdfRenderer_wkhtmltopdf'] = 'share_pdfShowInline,share_pdfUsername,share_pdfPassword';
+/**
+ * Fields
+ */
 
 $arrFields = [
     'addShare'             => [
@@ -44,7 +48,7 @@ $arrFields = [
         'exclude'   => true,
         'inputType' => 'checkboxWizard',
         'reference' => $GLOBALS['TL_LANG']['tl_module']['references']['share_buttons'],
-        'options'   => ['pdfButton', 'printButton', 'facebook', 'twitter', 'gplus'],
+        'options'   => ['pdfButton', 'printButton', 'mailto', 'facebook', 'twitter', 'gplus'],
         'eval'      => ['multiple' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true],
         'sql'       => "blob NULL",
     ],
@@ -131,6 +135,13 @@ $arrFields = [
         'eval'      => ['tl_class' => 'w50', 'maxlength' => '50'],
         'sql'       => "varchar(50) NOT NULL default ''",
     ],
+    'share_mailtoSubject' => [
+        'label'            => &$GLOBALS['TL_LANG']['tl_module']['share_mailtoSubject'],
+        'exclude'          => true,
+        'inputType'        => 'text',
+        'eval'             => ['tl_class' => 'w50 clr'],
+        'sql'              => "varchar(128) NOT NULL default ''",
+    ],
 ];
 
-$dc['fields'] = array_merge($dc['fields'], $arrFields);
+$arrDca['fields'] = array_merge($arrDca['fields'], $arrFields);
