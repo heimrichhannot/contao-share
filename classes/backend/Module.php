@@ -36,18 +36,18 @@ class Module extends \Backend
 
             if (in_array('mailto', $arrButtons))
             {
-                $arrDca['palettes'][$objModule->type] = str_replace('addShare', 'addShare,share_mailtoSubject', $arrDca['palettes'][$objModule->type]);
+                $arrDca['subpalettes']['addShare'] = str_replace('share_buttons', 'share_buttons,share_mailtoSubject', $arrDca['subpalettes']['addShare']);
             }
 
             if (in_array('pdfButton', $arrButtons))
             {
-                $arrDca['palettes'][$objModule->type] = str_replace('addShare', 'addShare,share_customPrintTpl,share_pdfRenderer', $arrDca['palettes'][$objModule->type]);
+                $arrDca['subpalettes']['addShare'] = str_replace('share_buttons', 'share_buttons,share_customPrintTpl,share_pdfRenderer', $arrDca['subpalettes']['addShare']);
             }
 
             if (in_array('printButton', $arrButtons))
             {
-                $arrDca['palettes'][$objModule->type] = str_replace('share_customPrintTpl', '', $arrDca['palettes'][$objModule->type]);
-                $arrDca['palettes'][$objModule->type] = str_replace('addShare', 'addShare,share_customPrintTpl', $arrDca['palettes'][$objModule->type]);
+                $arrDca['subpalettes']['addShare'] = str_replace('share_customPrintTpl', '', $arrDca['subpalettes']['addShare']);
+                $arrDca['subpalettes']['addShare'] = str_replace('share_buttons', 'share_buttons,share_customPrintTpl', $arrDca['subpalettes']['addShare']);
             }
         }
     }
