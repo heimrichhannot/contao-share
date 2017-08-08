@@ -190,7 +190,7 @@ class Share extends \Frontend
         $this->Template->encTitle = rawurlencode($this->rawTitle);
 
         $strSubject                   = sprintf($this->share_mailtoSubject, $this->Template->encTitle) ?: $this->Template->encTitle;
-        $this->Template->mailto       = 'mailto:&subject=' . $strSubject . '&body=' . $this->Template->encUrl;
+        $this->Template->mailto       = 'mailto:?subject=' . $strSubject . '&body=' . $this->Template->encUrl;
         $this->Template->mailtoButton = $this->mailto;
 
         $this->Template->facebookShareUrl = $this->generateSocialLink("facebook");

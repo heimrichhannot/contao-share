@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.4] - 2017-08-08
+
+### Fixed
+- mailto
+
 ## [1.3.3] - 2017-08-08
 
 ### Fixed
