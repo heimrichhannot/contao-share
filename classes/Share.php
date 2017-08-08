@@ -71,6 +71,7 @@ class Share extends \Frontend
         {
             $this->pdfButton   = false;
             $this->printButton = false;
+            $this->mailto      = false;
             $this->facebook    = false;
             $this->twitter     = false;
             $this->gplus       = false;
@@ -119,13 +120,13 @@ class Share extends \Frontend
 
     public function generate()
     {
-        if (Request::hasGet(static::SHARE_REQUEST_PARAMETER_PDF)) {
+        if (Request::hasGet(static::SHARE_REQUEST_PARAMETER_PDF))
+        {
             if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $this->objModel->id)
             {
                 return;
             }
         }
-
 
         // Export iCal
         if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_ICAL))
@@ -188,8 +189,8 @@ class Share extends \Frontend
         $this->Template->encUrl   = rawurlencode($this->rawUrl);
         $this->Template->encTitle = rawurlencode($this->rawTitle);
 
-        $strSubject = sprintf($this->share_mailtoSubject, $this->Template->encTitle) ?: $this->Template->encTitle;
-        $this->Template->mailto = 'mailto:&subject=' . $strSubject . '&body=' . $this->Template->encUrl;
+        $strSubject                   = sprintf($this->share_mailtoSubject, $this->Template->encTitle) ?: $this->Template->encTitle;
+        $this->Template->mailto       = 'mailto:&subject=' . $strSubject . '&body=' . $this->Template->encUrl;
         $this->Template->mailtoButton = $this->mailto;
 
         $this->Template->facebookShareUrl = $this->generateSocialLink("facebook");
@@ -394,7 +395,7 @@ class Share extends \Frontend
     {
         if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $objModel->id)
         {
-            return ;
+            return;
         }
         $strFileName = null;
 
@@ -412,10 +413,12 @@ class Share extends \Frontend
         {
             $pdfPage->setFileName($strFileName);
         }
-        if (isset($objModel->share_pdfUsername)) {
+        if (isset($objModel->share_pdfUsername))
+        {
             $pdfPage->setLoginUsername($objModel->share_pdfUsername);
         }
-        if (isset($objModel->share_pdfPassword)) {
+        if (isset($objModel->share_pdfPassword))
+        {
             $pdfPage->setLoginPassword($objModel->share_pdfPassword);
         }
         $pdfPage->generate($objPage);

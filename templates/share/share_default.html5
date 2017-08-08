@@ -1,63 +1,71 @@
-<?php  $this->extend('block_unsearchable'); ?>
+<?php $this->extend('block_unsearchable'); ?>
 
 <?php $this->block('content'); ?>
 
 <ul class="share-links list-inline hidden-print">
     <?php if ($this->printButton): ?>
-		<li class="hidden-xs">
-			<a href="<?php echo $this->printUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->printTitle; ?>" target="_blank">
-				<i class="ei ei-printer"></i><span class="sr-only"><?php echo $this->printTitle; ?></span>
-			</a>
-		</li>
+        <li class="hidden-xs">
+            <a href="<?php echo $this->printUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->printTitle; ?>"
+               target="_blank">
+                <i class="ei ei-printer"></i><span class="sr-only"><?php echo $this->printTitle; ?></span>
+            </a>
+        </li>
     <?php endif; ?>
     <?php if ($this->pdfButton): ?>
-		<li class="hidden-xs">
-			<a href="<?php echo $this->pdfUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->pdfTitle; ?>">
-				<i class="ei ei-download"></i><span class="sr-only"><?php echo $this->pdfTitle; ?></span>
-			</a>
-		</li>
+        <li class="hidden-xs">
+            <a href="<?php echo $this->pdfUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->pdfTitle; ?>">
+                <i class="ei ei-download"></i><span class="sr-only"><?php echo $this->pdfTitle; ?></span>
+            </a>
+        </li>
     <?php endif; ?>
     <?php if ($this->mailtoButton): ?>
         <li>
             <a href="<?php echo $this->mailto; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->mailtoTitle; ?>">
-                <i class="ei ei-comment_alt"></i><span class="sr-only"><?php echo $this->mailtoTitle; ?></span>
+                <i class="fa fa-envelope"></i><span class="sr-only"><?php echo $this->mailtoTitle; ?></span>
             </a>
         </li>
     <?php endif; ?>
     <?php if ($this->icalButton): ?>
-    	<li>
-			<a href="<?php echo $this->icalUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->icalTitle; ?>">
-				<i class="ei ei-calendar"></i><span class="sr-only"><?php echo $this->pdfTitle; ?></span>
-			</a>
-		</li>
+        <li>
+            <a href="<?php echo $this->icalUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->icalTitle; ?>">
+                <i class="ei ei-calendar"></i><span class="sr-only"><?php echo $this->pdfTitle; ?></span>
+            </a>
+        </li>
     <?php endif; ?>
-	<?php if ($this->socialShare): ?>
-		<li class="social-share dropdown">
-			<button id="dLabel" type="button" class="btn btn-default btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="<?php echo $this->shareTitle; ?>">
-				<i class="ei ei-social_share"></i>
-				<span class="caret"></span>
-			</button>
-			<ul class="share-links dropdown-menu" role="menu" aria-labelledby="dLabel">
-				<?php if ($this->facebookButton): ?>
-					<li>
-						<a href="<?php echo $this->facebookShareUrl; ?>" rel="nofollow" title="<?php echo $this->facebookTitle; ?>" onclick="window.open(this.href,'','width=640,height=380,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no');return false"><i class="ei ei-social_facebook"></i> <span><?php echo $this->facebookTitle; ?></span></a>
-					</li>
-				<?php endif; ?>
+    <?php if ($this->socialShare): ?>
+        <li class="social-share dropdown">
+            <button id="dLabel" type="button" class="btn btn-default btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    title="<?php echo $this->shareTitle; ?>">
+                <i class="ei ei-social_share"></i>
+                <span class="caret"></span>
+            </button>
+            <ul class="share-links dropdown-menu" role="menu" aria-labelledby="dLabel">
+                <?php if ($this->facebookButton): ?>
+                    <li>
+                        <a href="<?php echo $this->facebookShareUrl; ?>" rel="nofollow" title="<?php echo $this->facebookTitle; ?>"
+                           onclick="window.open(this.href,'','width=640,height=380,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no');return false"><i
+                                class="ei ei-social_facebook"></i> <span><?php echo $this->facebookTitle; ?></span></a>
+                    </li>
+                <?php endif; ?>
 
-				<?php if ($this->twitterButton): ?>
-					<li>
-						<a href="<?php echo $this->twitterShareUrl; ?>" rel="nofollow" title="<?php echo $this->twitterTitle; ?>" onclick="window.open(this.href,'','width=640,height=380,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no');return false"><i class="ei ei-social_twitter"></i> <span><?php echo $this->twitterTitle; ?></span></a>
-					</li>
-				<?php endif; ?>
+                <?php if ($this->twitterButton): ?>
+                    <li>
+                        <a href="<?php echo $this->twitterShareUrl; ?>" rel="nofollow" title="<?php echo $this->twitterTitle; ?>"
+                           onclick="window.open(this.href,'','width=640,height=380,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no');return false"><i
+                                class="ei ei-social_twitter"></i> <span><?php echo $this->twitterTitle; ?></span></a>
+                    </li>
+                <?php endif; ?>
 
-				<?php if ($this->gplusButton): ?>
-					<li>
-						<a href="<?php echo $this->gplusShareUrl; ?>" rel="nofollow" title="<?php echo $this->gplusTitle; ?>" onclick="window.open(this.href,'','width=600,height=200,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no');return false"><i class="ei ei-social_googleplus"></i> <span><?php echo $this->gplusTitle; ?></span></a>
-					</li>
-				<?php endif; ?>
-			</ul>
-		</li>
-	<?php endif; ?>
+                <?php if ($this->gplusButton): ?>
+                    <li>
+                        <a href="<?php echo $this->gplusShareUrl; ?>" rel="nofollow" title="<?php echo $this->gplusTitle; ?>"
+                           onclick="window.open(this.href,'','width=600,height=200,modal=yes,left=100,top=50,location=no,menubar=no,resizable=yes,scrollbars=yes,status=no,toolbar=no');return false"><i
+                                class="ei ei-social_googleplus"></i> <span><?php echo $this->gplusTitle; ?></span></a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </li>
+    <?php endif; ?>
 </ul>
 
 <?php $this->endblock(); ?>

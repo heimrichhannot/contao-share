@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.2] - 2017-08-08
+
+### Fixed
+- mailto integration
+
 ## [1.3.1] - 2017-08-01
 
 ### Added
