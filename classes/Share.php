@@ -137,22 +137,22 @@ class Share extends \Frontend
         }
 
         // PDF
-//        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_PDF)))
-//        {
-//            $strClass = \Module::findClass($this->objModel->type);
-//            if (!class_exists($strClass))
-//            {
-//                return;
-//            }
-//            $objModule = new $strClass($this->objModel);
-//            if (!$objModule->addShare)
-//            {
-//                return;
-//            }
-//            \Input::setGet("pdf", false);  // prevent endless loops, because of generate
-//            $this->strItem = $objModule->generate();
-//            $this->generatePdf();
-//        }
+        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_PDF)))
+        {
+            $strClass = \Module::findClass($this->objModel->type);
+            if (!class_exists($strClass))
+            {
+                return;
+            }
+            $objModule = new $strClass($this->objModel);
+            if (!$objModule->addShare)
+            {
+                return;
+            }
+            \Input::setGet("pdf", false);  // prevent endless loops, because of generate
+            $this->strItem = $objModule->generate();
+            $this->generatePdf();
+        }
 
 
         // Render share buttons

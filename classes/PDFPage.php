@@ -13,7 +13,6 @@ namespace HeimrichHannot\Share;
 
 
 use HeimrichHannot\Share\PdfModule\WkhtmltopdfModule;
-use Knp\Snappy\Pdf;
 
 class PDFPage extends PrintPage
 {
@@ -40,7 +39,7 @@ class PDFPage extends PrintPage
     /**
      * @return string
      */
-    public function getFileName(): string
+    public function getFileName()
     {
         return $this->fileName;
     }
@@ -56,7 +55,7 @@ class PDFPage extends PrintPage
     /**
      * @return bool
      */
-    public function getOutputInline(): bool
+    public function getOutputInline()
     {
         return $this->outputInline;
     }
@@ -65,7 +64,7 @@ class PDFPage extends PrintPage
      * Set if the PDF output should be inline or download
      * @param bool $outputInline
      */
-    public function setOutputInline(bool $outputInline)
+    public function setOutputInline($outputInline)
     {
         $this->outputInline = $outputInline;
     }
@@ -93,7 +92,7 @@ class PDFPage extends PrintPage
 
     protected function generateOutput ($blnCheckRequest)
     {
-        return $this->generatePDF($this->Template->getResponse()->getContent());
+        return $this->generatePDF($this->Template->parse());
     }
 
     public function generatePDF ($strArticle)
