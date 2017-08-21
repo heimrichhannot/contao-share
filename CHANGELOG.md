@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.5] - 2017-08-21
+
+### Fixed
+- feedback integration
+
 ## [1.3.4] - 2017-08-08
 
 ### Fixed

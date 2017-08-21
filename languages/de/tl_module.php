@@ -53,8 +53,14 @@ $arrLang['share_pdfUsername'][1] = 'Falls Sie Daten (Bilder,CSS) von einer Seite
 $arrLang['share_pdfPassword'][0] = 'Authentifizierungspassword';
 $arrLang['share_pdfPassword'][1] = 'Siehe Authentifizierungsbenutzername.';
 
-$arrLang['share_mailtoSubject'][0] = 'Betreff';
+$arrLang['share_mailtoSubject'][0] = 'Betreff (mailto)';
 $arrLang['share_mailtoSubject'][1] = 'Geben Sie hier den Betreff ein, der dem mailto-Link hinzugefügt werden soll. Wenn Sie nichts eingeben, wird der Titel der geteilten Entität genutzt. Sie können im Text mit "%s" auch den Titel der geteilten Entität referenzieren.';
+
+$arrLang['share_feedbackEmail'][0] = 'E-Mail-Adresse (Feedback)';
+$arrLang['share_feedbackEmail'][1] = 'Geben Sie hier die E-Mail-Adresse ein, an die das Feedback geschickt werden soll.';
+
+$arrLang['share_feedbackSubject'][0] = 'Betreff (Feedback)';
+$arrLang['share_feedbackSubject'][1] = 'Geben Sie hier den Betreff ein, der dem Feedback-mailto-Link hinzugefügt werden soll. Wenn Sie nichts eingeben, wird der Titel der geteilten Entität genutzt. Sie können im Text mit "%s" auch den Titel der geteilten Entität referenzieren.';
 
 /**
  * Legends
@@ -70,3 +76,4 @@ $arrLang['references']['share_buttons']['facebook']    = 'Auf Facebook teilen';
 $arrLang['references']['share_buttons']['twitter']     = 'Auf Twitter teilen';
 $arrLang['references']['share_buttons']['gplus']       = 'Auf Google+ teilen';
 $arrLang['references']['share_buttons']['mailto']      = 'Per E-Mail teilen';
+$arrLang['references']['share_buttons']['feedback']    = 'Feedback senden';

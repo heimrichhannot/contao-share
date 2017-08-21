@@ -72,6 +72,7 @@ class Share extends \Frontend
             $this->pdfButton   = false;
             $this->printButton = false;
             $this->mailto      = false;
+            $this->feedback    = false;
             $this->facebook    = false;
             $this->twitter     = false;
             $this->gplus       = false;
@@ -92,6 +93,7 @@ class Share extends \Frontend
                 $this->pdfButton   = true;
                 $this->printButton = true;
                 $this->mailto      = true;
+                $this->feedback      = true;
                 $this->facebook    = true;
                 $this->twitter     = true;
                 $this->gplus       = true;
@@ -100,7 +102,8 @@ class Share extends \Frontend
             case 'eventreader_plus':
                 $this->pdfButton   = true;
                 $this->printButton = true;
-                $this->mailto      = true;
+            $this->mailto      = true;
+            $this->feedback      = true;
                 $this->icalButton  = true;
                 $this->facebook    = true;
                 $this->twitter     = true;
@@ -110,6 +113,7 @@ class Share extends \Frontend
                 $this->pdfButton   = true;
                 $this->printButton = true;
                 $this->mailto      = true;
+                $this->feedback      = true;
                 $this->icalButton  = false;
                 $this->facebook    = true;
                 $this->twitter     = true;
@@ -192,6 +196,10 @@ class Share extends \Frontend
         $strSubject                   = sprintf($this->share_mailtoSubject, $this->Template->encTitle) ?: $this->Template->encTitle;
         $this->Template->mailto       = 'mailto:?subject=' . $strSubject . '&body=' . $this->Template->encUrl;
         $this->Template->mailtoButton = $this->mailto;
+
+        $strSubject                     = sprintf($this->share_feedbackSubject, $this->Template->encTitle) ?: $this->Template->encTitle;
+        $this->Template->feedback       = 'mailto:' . $this->share_feedbackEmail . '?subject=' . $strSubject . '&body=' . $this->Template->encUrl;
+        $this->Template->feedbackButton = $this->mailto;
 
         $this->Template->facebookShareUrl = $this->generateSocialLink("facebook");
         $this->Template->twitterShareUrl  = $this->generateSocialLink("twitter");

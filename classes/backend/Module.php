@@ -34,6 +34,11 @@ class Module extends \Backend
         {
             $arrButtons = deserialize($objModule->share_buttons, true);
 
+            if (in_array('feedback', $arrButtons))
+            {
+                $arrDca['subpalettes']['addShare'] = str_replace('share_buttons', 'share_buttons,share_feedbackEmail,share_feedbackSubject', $arrDca['subpalettes']['addShare']);
+            }
+
             if (in_array('mailto', $arrButtons))
             {
                 $arrDca['subpalettes']['addShare'] = str_replace('share_buttons', 'share_buttons,share_mailtoSubject', $arrDca['subpalettes']['addShare']);
