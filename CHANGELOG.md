@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.6] - 2017-09-25
+
+### Changed
+- replace `$this->strTemplate` with `$this->customTpl` removed from `share` class as modules, as customTpl should be something like `share_*` 
+
 ## [1.3.5] - 2017-08-21
 
 ### Fixed

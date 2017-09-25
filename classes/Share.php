@@ -53,11 +53,6 @@ class Share extends \Frontend
         $this->space   = deserialize($objModule->space);
         $this->cssID   = deserialize($objModule->cssID, true);
 
-        if ($this->customTpl != '' && TL_MODE == 'FE')
-        {
-            $this->strTemplate = $this->customTpl;
-        }
-
         $arrHeadline    = deserialize($objModule->headline);
         $this->headline = is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
         $this->hl       = is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
