@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2017-10-10
+
+### Fixed
+- print with `tl_module.share_customPrintTpl` under contao 4 now works
+
+### Changed
+- set href for print link to `javascript:window.print();` if no `tl_module.share_customPrintTpl` is set
+
 ## [1.3.6] - 2017-09-25
 
 ### Changed

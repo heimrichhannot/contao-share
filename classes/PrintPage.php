@@ -11,6 +11,7 @@
 namespace HeimrichHannot\Share;
 
 
+use Contao\Config;
 use HeimrichHannot\Request\Request;
 
 class PrintPage extends \PageRegular
@@ -56,7 +57,7 @@ class PrintPage extends \PageRegular
      * Generate a print page
      *
      * @param \PageModel $objPage
-     * @param boolean    $blnCheckRequest
+     * @param boolean $blnCheckRequest
      */
     public function generate($objPage, $blnCheckRequest = false)
     {
@@ -84,16 +85,13 @@ class PrintPage extends \PageRegular
         $this->Template->isRTL    = false;
 
         // Mark RTL languages (see #7171)
-        if ($GLOBALS['TL_LANG']['MSC']['textDirection'] == 'rtl')
-        {
+        if ($GLOBALS['TL_LANG']['MSC']['textDirection'] == 'rtl') {
             $this->Template->isRTL = true;
         }
 
         // HOOK: modify the page object
-        if (isset($GLOBALS['TL_HOOKS']['generatePrintPage']) && is_array($GLOBALS['TL_HOOKS']['generatePrintPage']))
-        {
-            foreach ($GLOBALS['TL_HOOKS']['generatePrintPage'] as $callback)
-            {
+        if (isset($GLOBALS['TL_HOOKS']['generatePrintPage']) && is_array($GLOBALS['TL_HOOKS']['generatePrintPage'])) {
+            foreach ($GLOBALS['TL_HOOKS']['generatePrintPage'] as $callback) {
                 $this->import($callback[0]);
                 $this->{$callback[0]}->{$callback[1]}($this->strBuffer, $this->arrConfig, $this);
             }
@@ -126,7 +124,8 @@ class PrintPage extends \PageRegular
         $this->Template->buffer = $this->getBuffer();
 
         $this->generateHead($objPage);
-        return $this->generateOutput($blnCheckRequest);
+
+        return $this->generateOutput(true);
     }
 
     protected function generateHead($objPage)
@@ -135,18 +134,90 @@ class PrintPage extends \PageRegular
         $strScript = 'window.print();';
 
         // close dialog if not in debug mode
-        if (!Request::hasGet('pDebug'))
-        {
+        if (!Request::hasGet('pDebug')) {
             $strScript .= 'setTimeout(window.close, 0);';
+        } else {
+            return;
         }
 
         $this->Template->head = \Template::generateInlineScript($strScript, $objPage->outputFormat != 'html5');
     }
 
-    protected function generateOutput ($blnCheckRequest)
+    protected function generateOutput($blnCheckRequest)
     {
-        // Print the template to the screen
-        $this->Template->output($blnCheckRequest);
+        // Strip non-printable areas
+        while (($intStart = strpos($this->Template->buffer, '<!-- print::stop -->')) !== false) {
+            if (($intEnd = strpos($this->Template->buffer, '<!-- print::continue -->', $intStart)) !== false) {
+                $intCurrent = $intStart;
+
+                // Handle nested tags
+                while (($intNested = strpos($this->Template->buffer, '<!-- print::stop -->', $intCurrent + 20)) !== false && $intNested < $intEnd) {
+                    if (($intNewEnd = strpos($this->Template->buffer, '<!-- print::continue -->', $intEnd + 24)) !== false) {
+                        $intEnd     = $intNewEnd;
+                        $intCurrent = $intNested;
+                    } else {
+                        break;
+                    }
+                }
+
+                $this->Template->buffer = substr($this->Template->buffer, 0, $intStart) . substr($this->strBuffer, $intEnd + 24);
+            } else {
+                break;
+            }
+        }
+
+        if (version_compare(VERSION, '4.0', '<')) {
+            // Print the template to the screen
+            $this->Template->output($blnCheckRequest);
+        } else {
+
+            $this->Template->keywords = '';
+            $arrKeywords              = \StringUtil::trimsplit(',', $GLOBALS['TL_KEYWORDS']);
+
+            // Add the meta keywords
+            if (strlen($arrKeywords[0])) {
+                $this->Template->keywords = str_replace(["\n", "\r", '"'], [' ', '', ''], implode(', ', array_unique($arrKeywords)));
+            }
+
+            // Parse the template
+            $buffer = $this->Template->parse();
+
+            // HOOK: add custom output filters
+            if (isset($GLOBALS['TL_HOOKS']['outputFrontendTemplate']) && is_array($GLOBALS['TL_HOOKS']['outputFrontendTemplate'])) {
+                foreach ($GLOBALS['TL_HOOKS']['outputFrontendTemplate'] as $callback) {
+                    $this->import($callback[0]);
+                    $buffer = $this->{$callback[0]}->{$callback[1]}($buffer, $this->strTemplate);
+                }
+            }
+
+            // Replace insert tags
+            $buffer = $this->replaceInsertTags($buffer, false); // do not cache, otherwise subrequest for esi tags wont work
+            $buffer = $this->replaceDynamicScriptTags($buffer);
+
+            // HOOK: allow to modify the compiled markup (see #4291)
+            if (isset($GLOBALS['TL_HOOKS']['modifyFrontendPage']) && is_array($GLOBALS['TL_HOOKS']['modifyFrontendPage'])) {
+                foreach ($GLOBALS['TL_HOOKS']['modifyFrontendPage'] as $callback) {
+                    $this->import($callback[0]);
+                    $buffer = $this->{$callback[0]}->{$callback[1]}($buffer, $this->strTemplate);
+                }
+            }
+
+            $request = Request::getInstance();
+
+            /**
+             * @var $kernel \Contao\ManagerBundle\HttpKernel\ContaoKernel
+             */
+            $kernel = \System::getContainer()->get('kernel');
+
+            $response = new \Symfony\Component\HttpFoundation\Response($buffer);
+            $response->headers->set('Content-Type', $this->strContentType . '; charset=' . Config::get('characterSet'));
+
+            $response->send();
+            $kernel->terminate($request, $response);
+
+            exit;
+        }
+
     }
 
     /**
@@ -187,8 +258,8 @@ class PrintPage extends \PageRegular
     /**
      * Set an object property
      *
-     * @param string $strKey   The property name
-     * @param mixed  $varValue The property value
+     * @param string $strKey The property name
+     * @param mixed $varValue The property value
      */
     public function __set($strKey, $varValue)
     {
@@ -205,10 +276,8 @@ class PrintPage extends \PageRegular
      */
     public function __get($strKey)
     {
-        if (isset($this->arrData[$strKey]))
-        {
-            if (is_object($this->arrData[$strKey]) && is_callable($this->arrData[$strKey]))
-            {
+        if (isset($this->arrData[$strKey])) {
+            if (is_object($this->arrData[$strKey]) && is_callable($this->arrData[$strKey])) {
                 return $this->arrData[$strKey]();
             }
 

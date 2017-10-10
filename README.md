@@ -50,3 +50,17 @@ Add the following Syntax to your templates, to provide share links.
 ```
 <?= $this->share; ?>
 ```
+
+### Print page
+
+To address your custom module print layout, the url must contain the `print` parameter with the module id as value. (Example: `?print=57`). 
+The default print link will do that for you and will create a new tab/window and close it immediately after the window was printed by the user.
+To debug the print layout, add the `pDebug=1` parameter to your print url (Example: `?print=57&pDebug=1`).
+
+For regions within your templates that should not be printable, add `<!-- print::stop -->` before that region and `<!-- print::continue -->` afterwards.
+
+```
+<!-- print::stop -->
+DO NOT PRINT THIS!
+<!-- print::continue -->
+``` 

@@ -14,7 +14,6 @@ namespace HeimrichHannot\Share;
 
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\Request\Request;
-use HeimrichHannot\Share\PdfModule\WkhtmltopdfModule;
 
 class Share extends \Frontend
 {
@@ -22,9 +21,9 @@ class Share extends \Frontend
 
     protected $strTemplate = 'share_default';
 
-    protected $arrData    = [];
-    protected $objModel   = null;
-    protected $objModule  = null;
+    protected $arrData = [];
+    protected $objModel = null;
+    protected $objModule = null;
     protected $objCurrent = null;
 
     protected $socialShare = false;
@@ -35,12 +34,9 @@ class Share extends \Frontend
 
     public function __construct($objModule, $objCurrent)
     {
-        if ($objModule instanceof \Model)
-        {
+        if ($objModule instanceof \Model) {
             $this->objModel = $objModule;
-        }
-        elseif ($objModule instanceof \Model\Collection)
-        {
+        } elseif ($objModule instanceof \Model\Collection) {
             $this->objModel = $objModule->current();
         }
         $this->objModule = $objModule;
@@ -62,8 +58,7 @@ class Share extends \Frontend
         $arrButtons = deserialize($this->arrData['share_buttons'], true);
 
         // overwrite buttons
-        if (!empty($arrButtons))
-        {
+        if (!empty($arrButtons)) {
             $this->pdfButton   = false;
             $this->printButton = false;
             $this->mailto      = false;
@@ -72,8 +67,7 @@ class Share extends \Frontend
             $this->twitter     = false;
             $this->gplus       = false;
 
-            foreach ($arrButtons as $key => $strType)
-            {
+            foreach ($arrButtons as $key => $strType) {
                 $this->{$strType} = true;
             }
         }
@@ -81,14 +75,13 @@ class Share extends \Frontend
 
     protected function setDefaultButtons($strType)
     {
-        switch ($strType)
-        {
+        switch ($strType) {
             case 'newsreader':
             case 'newsreader_plus':
                 $this->pdfButton   = true;
                 $this->printButton = true;
                 $this->mailto      = true;
-                $this->feedback      = true;
+                $this->feedback    = true;
                 $this->facebook    = true;
                 $this->twitter     = true;
                 $this->gplus       = true;
@@ -97,8 +90,8 @@ class Share extends \Frontend
             case 'eventreader_plus':
                 $this->pdfButton   = true;
                 $this->printButton = true;
-            $this->mailto      = true;
-            $this->feedback      = true;
+                $this->mailto      = true;
+                $this->feedback    = true;
                 $this->icalButton  = true;
                 $this->facebook    = true;
                 $this->twitter     = true;
@@ -108,7 +101,7 @@ class Share extends \Frontend
                 $this->pdfButton   = true;
                 $this->printButton = true;
                 $this->mailto      = true;
-                $this->feedback      = true;
+                $this->feedback    = true;
                 $this->icalButton  = false;
                 $this->facebook    = true;
                 $this->twitter     = true;
@@ -119,33 +112,27 @@ class Share extends \Frontend
 
     public function generate()
     {
-        if (Request::hasGet(static::SHARE_REQUEST_PARAMETER_PDF))
-        {
-            if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $this->objModel->id)
-            {
+        if (Request::hasGet(static::SHARE_REQUEST_PARAMETER_PDF)) {
+            if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $this->objModel->id) {
                 return;
             }
         }
 
         // Export iCal
-        if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_ICAL))
-        {
+        if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_ICAL)) {
             $this->generateIcal(\Input::get(Share::SHARE_REQUEST_PARAMETER_ICAL));
 
             return;
         }
 
         // PDF
-        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_PDF)))
-        {
+        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_PDF))) {
             $strClass = \Module::findClass($this->objModel->type);
-            if (!class_exists($strClass))
-            {
+            if (!class_exists($strClass)) {
                 return;
             }
             $objModule = new $strClass($this->objModel);
-            if (!$objModule->addShare)
-            {
+            if (!$objModule->addShare) {
                 return;
             }
             \Input::setGet("pdf", false);  // prevent endless loops, because of generate
@@ -177,10 +164,15 @@ class Share extends \Frontend
         // Add syndication variables
         $request = Url::removeAllParametersFromUri(\Environment::get('indexFreeRequest'));
 
-        $this->Template->printUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PRINT . '=' . $this->id);
-        $this->Template->pdfUrl   = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PDF . '=' . $this->id);
-        $this->Template->icalUrl  = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_ICAL . '=' . $this->id);
-        $this->Template->icalUrl  = Url::addQueryString('title=Termin speichern', $this->Template->icalUrl);
+        if ($this->share_customPrintTpl) {
+            $this->Template->printUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PRINT . '=' . $this->id);
+        } else {
+            $this->Template->printUrl = 'javascript:window.print();';
+        }
+
+        $this->Template->pdfUrl  = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PDF . '=' . $this->id);
+        $this->Template->icalUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_ICAL . '=' . $this->id);
+        $this->Template->icalUrl = Url::addQueryString('title=Termin speichern', $this->Template->icalUrl);
 
         $this->rawUrl   = Url::getCurrentUrl();
         $this->rawTitle = html_entity_decode($objPage->pageTitle ?: $this->objCurrent->headline ?: $this->objCurrent->title);
@@ -200,16 +192,17 @@ class Share extends \Frontend
         $this->Template->twitterShareUrl  = $this->generateSocialLink("twitter");
         $this->Template->gplusShareUrl    = $this->generateSocialLink("gplus");
 
-        $this->Template->printTitle     = specialchars($GLOBALS['TL_LANG']['MSC']['printPage']);
-        $this->Template->pdfTitle       = specialchars($GLOBALS['TL_LANG']['MSC']['printAsPdf']);
-        $this->Template->mailtoTitle    = specialchars($GLOBALS['TL_LANG']['MSC']['mailtoTitle']);
-        $this->Template->facebookTitle  = specialchars($GLOBALS['TL_LANG']['MSC']['facebookShare']);
-        $this->Template->twitterTitle   = specialchars($GLOBALS['TL_LANG']['MSC']['twitterShare']);
-        $this->Template->gplusTitle     = specialchars($GLOBALS['TL_LANG']['MSC']['gplusShare']);
-        $this->Template->icalTitle      = specialchars($GLOBALS['TL_LANG']['MSC']['icalShareTitle']);
-        $this->Template->facebookButton = $this->facebook;
-        $this->Template->gplusButton    = $this->gplus;
-        $this->Template->twitterButton  = $this->twitter;
+        $this->Template->printAttributes =
+        $this->Template->printTitle = specialchars($GLOBALS['TL_LANG']['MSC']['printPage']);
+        $this->Template->pdfTitle        = specialchars($GLOBALS['TL_LANG']['MSC']['printAsPdf']);
+        $this->Template->mailtoTitle     = specialchars($GLOBALS['TL_LANG']['MSC']['mailtoTitle']);
+        $this->Template->facebookTitle   = specialchars($GLOBALS['TL_LANG']['MSC']['facebookShare']);
+        $this->Template->twitterTitle    = specialchars($GLOBALS['TL_LANG']['MSC']['twitterShare']);
+        $this->Template->gplusTitle      = specialchars($GLOBALS['TL_LANG']['MSC']['gplusShare']);
+        $this->Template->icalTitle       = specialchars($GLOBALS['TL_LANG']['MSC']['icalShareTitle']);
+        $this->Template->facebookButton  = $this->facebook;
+        $this->Template->gplusButton     = $this->gplus;
+        $this->Template->twitterButton   = $this->twitter;
 
         $this->Template->socialShare = $this->twitter || $this->facebook || $this->gplus;
         $this->Template->shareTitle  = specialchars($GLOBALS['TL_LANG']['MSC']['shareTitle']);
@@ -220,8 +213,8 @@ class Share extends \Frontend
      * Support share print for modules
      *
      * @param \ModuleModel $objRow
-     * @param string       $strBuffer
-     * @param \Module      $objModule
+     * @param string $strBuffer
+     * @param \Module $objModule
      *
      * @return string The output buffer is always returned
      */
@@ -229,25 +222,21 @@ class Share extends \Frontend
     {
         $arrButtons = deserialize($objModel->share_buttons, true);
 
-        if (!in_array('printButton', $arrButtons))
-        {
+        if (!in_array('printButton', $arrButtons)) {
             return $strBuffer;
         }
 
-        if (!Request::hasGet(static::SHARE_REQUEST_PARAMETER_PRINT))
-        {
+        if (!Request::hasGet(static::SHARE_REQUEST_PARAMETER_PRINT)) {
             return $strBuffer;
         }
 
-        if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PRINT) != $objModel->id)
-        {
+        if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PRINT) != $objModel->id) {
             return $strBuffer;
         }
 
         global $objPage;
 
-        if ($objModel->share_customPrintTpl == '')
-        {
+        if ($objModel->share_customPrintTpl == '') {
             return $strBuffer;
         }
 
@@ -271,8 +260,7 @@ class Share extends \Frontend
         $objEvent = \CalendarEventsModel::findByPk($eventID);
 
         $vevent = new \vevent();
-        if ($objEvent->addTime)
-        {
+        if ($objEvent->addTime) {
             $vevent->setProperty(
                 'dtstart',
                 [
@@ -295,29 +283,22 @@ class Share extends \Frontend
                     'sec'   => 0,
                 ]
             );
-        }
-        else
-        {
+        } else {
             $vevent->setProperty('dtstart', date('Ymd', $objEvent->startDate), ['VALUE' => 'DATE']);
-            if (!strlen($objEvent->endDate) || $objEvent->endDate == 0)
-            {
+            if (!strlen($objEvent->endDate) || $objEvent->endDate == 0) {
                 $vevent->setProperty('dtend', date('Ymd', $objEvent->startDate + 24 * 60 * 60), ['VALUE' => 'DATE']);
-            }
-            else
-            {
+            } else {
                 $vevent->setProperty('dtend', date('Ymd', $objEvent->endDate + 24 * 60 * 60), ['VALUE' => 'DATE']);
             }
         }
         $vevent->setProperty('summary', $objEvent->title, ENT_QUOTES, 'UTF-8');
         $vevent->setProperty('description', strip_tags($objEvent->details ? $objEvent->details : $objEvent->teaser));
-        if ($objEvent->recurring)
-        {
+        if ($objEvent->recurring) {
             $count     = 0;
             $arrRepeat = deserialize($objEvent->repeatEach);
             $arg       = $arrRepeat['value'];
             $unit      = $arrRepeat['unit'];
-            if ($arg == 1)
-            {
+            if ($arg == 1) {
                 $unit = substr($unit, 0, -1);
             }
 
@@ -325,8 +306,7 @@ class Share extends \Frontend
             $newstart  = strtotime($strtotime, $objEvent->startTime);
             $newend    = strtotime($strtotime, $objEvent->endTime);
             $freq      = 'YEARLY';
-            switch ($arrRepeat['unit'])
-            {
+            switch ($arrRepeat['unit']) {
                 case 'days':
                     $freq = 'DAILY';
                     break;
@@ -341,12 +321,10 @@ class Share extends \Frontend
                     break;
             }
             $rrule = ['FREQ' => $freq];
-            if ($objEvent->recurrences > 0)
-            {
+            if ($objEvent->recurrences > 0) {
                 $rrule['count'] = $objEvent->recurrences;
             }
-            if ($arg > 1)
-            {
+            if ($arg > 1) {
                 $rrule['INTERVAL'] = $arg;
             }
             $vevent->setProperty('rrule', $rrule);
@@ -355,11 +333,9 @@ class Share extends \Frontend
         /*
         * begin module event_recurrences handling
         */
-        if ($objEvent->repeatExecptions)
-        {
+        if ($objEvent->repeatExecptions) {
             $arrSkipDates = deserialize($objEvent->repeatExecptions);
-            foreach ($arrSkipDates as $skipDate)
-            {
+            foreach ($arrSkipDates as $skipDate) {
                 $exTStamp = strtotime($skipDate);
                 $exdate   = [
                     [
@@ -396,14 +372,12 @@ class Share extends \Frontend
 
     public static function renderPDFModule($objModel, $strBuffer, $objModule)
     {
-        if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $objModel->id)
-        {
+        if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $objModel->id) {
             return;
         }
         $strFileName = null;
 
-        if ($objModule instanceof ModulePdfReaderInterface)
-        {
+        if ($objModule instanceof ModulePdfReaderInterface) {
             $strFileName = $objModule->getFileName();
         }
 
@@ -412,16 +386,13 @@ class Share extends \Frontend
         global $objPage;
         $pdfPage = new PDFPage($objModel, $strBuffer);
 
-        if (!empty($strFileName))
-        {
+        if (!empty($strFileName)) {
             $pdfPage->setFileName($strFileName);
         }
-        if (isset($objModel->share_pdfUsername))
-        {
+        if (isset($objModel->share_pdfUsername)) {
             $pdfPage->setLoginUsername($objModel->share_pdfUsername);
         }
-        if (isset($objModel->share_pdfPassword))
-        {
+        if (isset($objModel->share_pdfPassword)) {
             $pdfPage->setLoginPassword($objModel->share_pdfPassword);
         }
         $pdfPage->generate($objPage);
@@ -430,10 +401,8 @@ class Share extends \Frontend
     public function generateSocialLink($network = null)
     {
         $link = '';
-        if (version_compare(VERSION . '.' . BUILD, '4.0', '>='))
-        {
-            switch ($network)
-            {
+        if (version_compare(VERSION . '.' . BUILD, '4.0', '>=')) {
+            switch ($network) {
                 case "facebook":
                     $link = 'https://www.facebook.com/sharer/sharer.php?u=' . $this->rawUrl . '&amp;t=' . $this->rawTitle;
                     break;
@@ -444,11 +413,8 @@ class Share extends \Frontend
                     $link = 'https://plus.google.com/share?url=' . $this->rawUrl . '"';
                     break;
             }
-        }
-        else
-        {
-            switch ($network)
-            {
+        } else {
+            switch ($network) {
                 case "facebook":
                     $link = 'share/?p=facebook&amp;u=' . $this->rawUrl . '&amp;t=' . $this->rawTitle;
                     break;
@@ -484,8 +450,7 @@ class Share extends \Frontend
      */
     public function __get($strKey)
     {
-        if (isset($this->arrData[$strKey]))
-        {
+        if (isset($this->arrData[$strKey])) {
             return $this->arrData[$strKey];
         }
 
