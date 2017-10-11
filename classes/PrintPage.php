@@ -160,11 +160,15 @@ class PrintPage extends \PageRegular
                     }
                 }
 
-                $this->Template->buffer = substr($this->Template->buffer, 0, $intStart) . substr($this->strBuffer, $intEnd + 24);
+                $this->Template->buffer = substr($this->Template->buffer, 0, $intStart) . substr($this->Template->buffer, $intEnd + 24);
             } else {
                 break;
             }
         }
+
+
+	// clear the buffer	
+	ob_clean();
 
         if (version_compare(VERSION, '4.0', '<')) {
             // Print the template to the screen

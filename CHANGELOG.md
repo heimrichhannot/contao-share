@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 2017-10-10
+
+### Fixed
+- clear the buffer before Template if generated
+- `<!-- print::stop-->` and `<!-- print::continue-->` typo
+
 ## [1.4.0] - 2017-10-10
 
 ### Fixed
