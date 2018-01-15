@@ -1,15 +1,16 @@
 {
-  "name": "heimrichhannot/contao-share",
-  "description": "A helper module for pdf-print, print and social share functionality based on bootstrap to custom modules.",
+  "name": "heimrichhannot/contao-share-bundle",
+  "type": "contao-bundle",
+  "description": "A bundle to provide extended pdf, print and social share functionality for contao.",
   "keywords": [
     "contao",
+    "symfony",
     "share",
     "facebook",
     "googleplus",
     "twitter",
     "pdf"
   ],
-  "type": "contao-module",
   "homepage": "https://github.com/heimrichhannot/contao-share",
   "license": "LGPL-3.0+",
   "authors": [
@@ -24,24 +25,33 @@
     "issues": "https://github.com/heimrichhannot/contao-share/issues"
   },
   "require": {
-    "php": "~5.4 || ~7.0",
-    "contao/core-bundle": "^3.5.1 || ~4.1",
-    "contao-community-alliance/composer-plugin": "~2.4 || ~3.0",
+    "php": "~7.1",
+    "contao/core-bundle": "~4.4",
     "heimrichhannot/contao-request": "^1.1"
+  },
+  "require-dev": {
+    "contao/test-case": "^1.1",
+    "contao/manager-plugin": "^2.0",
+    "friendsofphp/php-cs-fixer": "^2.2",
+    "phpunit/phpunit": "^6.0",
+    "satooshi/php-coveralls": "^1.0"
   },
   "suggest": {
     "mpdf/mpdf": "~6.1"
   },
   "autoload": {
+    "psr-4": {
+      "HeimrichHannot\\ShareBundle\\": "src/"
+    },
     "classmap": [
-      ""
+      "src/"
+    ],
+    "exclude-from-classmap": [
+      "src/Resources/contao/config/",
+      "src/Resources/contao/dca/",
+      "src/Resources/contao/languages/",
+      "src/Resources/contao/templates/"
     ]
   },
-  "extra": {
-    "contao": {
-      "sources": {
-        "": "system/modules/share"
-      }
-    }
-  }
+  "contao-manager-plugin": "HeimrichHannot\\SpeedBundle\\ContaoManager\\Plugin"
 }

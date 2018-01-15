@@ -1,0 +1,6 @@
+services:
+  huh:share:
+    hooks:
+      class: HeimrichHannot\ShareBundle\EventListener\HookListener
+    collector:
+      class: HeimrichHannot\ShareBundle\Components\ShareComponentCollector
