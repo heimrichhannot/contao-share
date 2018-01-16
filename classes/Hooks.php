@@ -10,6 +10,8 @@
 
 namespace HeimrichHannot\Share;
 
+use Contao\FrontendTemplate;
+use Contao\ModuleArticle;
 use HeimrichHannot\Request\Request;
 
 class Hooks
@@ -36,6 +38,30 @@ class Hooks
                 return $strBuffer;
             }
         }
+    }
+
+    /**
+     * @param string $buffer
+     * @param ModuleArticle $article
+     */
+    public function printArticleAsPdf ($buffer, $module)
+    {
+        if (!$module->addShare)
+        {
+            return;
+        }
+
+
+    }
+
+    /**
+     * @param FrontendTemplate $template
+     * @param array $data
+     * @param ModuleArticle $module
+     */
+    public function compileArticle($template, $data, $module)
+    {
+
     }
 
 }

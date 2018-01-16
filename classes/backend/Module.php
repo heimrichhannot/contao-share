@@ -11,7 +11,11 @@
 namespace HeimrichHannot\Share\Backend;
 
 
-class Module extends \Backend
+use Contao\Backend;
+use Contao\Controller;
+use Contao\ModuleModel;
+
+class Module extends Backend
 {
 
     /**
@@ -22,7 +26,7 @@ class Module extends \Backend
      */
     public function getPrintSoloTemplates(\DataContainer $dc)
     {
-        return \Controller::getTemplateGroup('share_print');
+        return Controller::getTemplateGroup('share_print');
     }
 
     public function modifyPalette(\DataContainer $objDc)
@@ -55,6 +59,15 @@ class Module extends \Backend
                 $arrDca['subpalettes']['addShare'] = str_replace('share_buttons', 'share_buttons,share_customPrintTpl', $arrDca['subpalettes']['addShare']);
             }
         }
+    }
+
+    /**
+     * Returns module with share activated
+     */
+    public static function getModuleWithShare ()
+    {
+        $modules = ModuleModel::findBy('addShare', '1');
+        return $modules;
     }
 
 }

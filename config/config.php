@@ -13,6 +13,8 @@
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['getFrontendModule']['share'] = ['HeimrichHannot\Share\Hooks', 'getFrontendModuleHook'];
+$GLOBALS['TL_HOOKS']['compileArticle']['share']    = ['HeimrichHannot\Share\Hooks', 'compileArticle'];
+$GLOBALS['TL_HOOKS']['printArticleAsPdf']['share'] = ['HeimrichHannot\Share\Hooks', 'printArticleAsPdf'];
 
 /**
  * Content elements
