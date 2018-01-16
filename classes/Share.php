@@ -12,6 +12,8 @@
 namespace HeimrichHannot\Share;
 
 
+use Contao\Module;
+use Contao\ModuleModel;
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\Request\Request;
 
@@ -59,13 +61,14 @@ class Share extends \Frontend
 
         // overwrite buttons
         if (!empty($arrButtons)) {
-            $this->pdfButton   = false;
-            $this->printButton = false;
-            $this->mailto      = false;
-            $this->feedback    = false;
-            $this->facebook    = false;
-            $this->twitter     = false;
-            $this->gplus       = false;
+            $this->pdfButton            = false;
+            $this->printButton          = false;
+            $this->printWithoutTemplate = false;
+            $this->mailto               = false;
+            $this->feedback             = false;
+            $this->facebook             = false;
+            $this->twitter              = false;
+            $this->gplus                = false;
 
             foreach ($arrButtons as $key => $strType) {
                 $this->{$strType} = true;
@@ -78,34 +81,37 @@ class Share extends \Frontend
         switch ($strType) {
             case 'newsreader':
             case 'newsreader_plus':
-                $this->pdfButton   = true;
-                $this->printButton = true;
-                $this->mailto      = true;
-                $this->feedback    = true;
-                $this->facebook    = true;
-                $this->twitter     = true;
-                $this->gplus       = true;
+            $this->pdfButton            = true;
+            $this->printButton          = true;
+            $this->printWithoutTemplate = false;
+            $this->mailto               = true;
+            $this->feedback             = true;
+            $this->facebook             = true;
+            $this->twitter              = true;
+            $this->gplus                = true;
                 break;
             case 'eventreader':
             case 'eventreader_plus':
-                $this->pdfButton   = true;
-                $this->printButton = true;
-                $this->mailto      = true;
-                $this->feedback    = true;
-                $this->icalButton  = true;
-                $this->facebook    = true;
-                $this->twitter     = true;
-                $this->gplus       = true;
+            $this->pdfButton            = true;
+            $this->printButton          = true;
+            $this->printWithoutTemplate = false;
+            $this->mailto               = true;
+            $this->feedback             = true;
+            $this->icalButton           = true;
+            $this->facebook             = true;
+            $this->twitter              = true;
+            $this->gplus                = true;
                 break;
             default:
-                $this->pdfButton   = true;
-                $this->printButton = true;
-                $this->mailto      = true;
-                $this->feedback    = true;
-                $this->icalButton  = false;
-                $this->facebook    = true;
-                $this->twitter     = true;
-                $this->gplus       = true;
+                $this->pdfButton            = true;
+                $this->printButton          = true;
+                $this->printWithoutTemplate = false;
+                $this->mailto               = true;
+                $this->feedback             = true;
+                $this->icalButton           = false;
+                $this->facebook             = true;
+                $this->twitter              = true;
+                $this->gplus                = true;
         }
     }
 
@@ -164,7 +170,7 @@ class Share extends \Frontend
         // Add syndication variables
         $request = Url::removeAllParametersFromUri(\Environment::get('indexFreeRequest'));
 
-        if ($this->share_customPrintTpl) {
+        if (!$this->printWithoutTemplate && $this->share_customPrintTpl) {
             $this->Template->printUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PRINT . '=' . $this->id);
         } else {
             $this->Template->printUrl = 'javascript:window.print();';
@@ -212,13 +218,13 @@ class Share extends \Frontend
     /**
      * Support share print for modules
      *
-     * @param \ModuleModel $objRow
+     * @param ModuleModel $objRow
      * @param string $strBuffer
-     * @param \Module $objModule
+     * @param Module|array $objModule
      *
      * @return string The output buffer is always returned
      */
-    public static function renderPrintableModule(\ModuleModel $objModel, $strBuffer, \Module $objModule)
+    public static function renderPrintableModule($objModel, $strBuffer, $objModule)
     {
         $arrButtons = deserialize($objModel->share_buttons, true);
 
@@ -239,8 +245,8 @@ class Share extends \Frontend
         if ($objModel->share_customPrintTpl == '') {
             return $strBuffer;
         }
-
-        $objPrintPage = new PrintPage($objModel->share_customPrintTpl, $strBuffer, $objModule->Template->getData());
+        $config = is_array($objModule) ? $objModule : $objModule->Template->getData();
+        $objPrintPage = new PrintPage($objModel->share_customPrintTpl, $strBuffer, $config);
         $objPrintPage->generate($objPage);
         exit;
     }

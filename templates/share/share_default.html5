@@ -3,7 +3,7 @@
 <?php $this->block('content'); ?>
 
 <ul class="share-links list-inline hidden-print">
-    <?php if ($this->printButton): ?>
+    <?php if ($this->printButton || $this->printWithoutTemplate): ?>
         <li class="hidden-xs">
             <a href="<?php echo $this->printUrl; ?>" class="btn btn-default btn-sm" rel="nofollow" title="<?php echo $this->printTitle; ?>"
                target="_blank">

@@ -28,14 +28,19 @@ class Hooks
      */
     public static function getFrontendModuleHook(\ModuleModel $objModel, $strBuffer, \Module $objModule)
     {
-        if (!$objModel->addShare) {
+        if (!$objModel->addShare)
+        {
             return $strBuffer;
-        } else {
-            if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PRINT)) {
+        } else
+        {
+            if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PRINT))
+            {
                 return Share::renderPrintableModule($objModel, $strBuffer, $objModule);
-            } elseif (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PDF)) {
+            } elseif (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PDF))
+            {
                 return Share::renderPDFModule($objModel, $strBuffer, $objModule);
-            } else {
+            } else
+            {
                 return $strBuffer;
             }
         }
@@ -45,7 +50,7 @@ class Hooks
      * @param string $buffer
      * @param ModuleArticle $article
      */
-    public function printArticleAsPdf ($buffer, $article)
+    public function printArticleAsPdf($buffer, $article)
     {
         if (!$article->addShare)
         {
@@ -63,9 +68,45 @@ class Hooks
      * @param array $data
      * @param ModuleArticle $module
      */
-    public function compileArticle($template, $data, $module)
+    public function compileArticle($template, $data, $article)
     {
+        if (!$article->addShare)
+        {
+            return;
+        }
+        if (!$moduleModel = ModuleModel::findById($article->shareModule))
+        {
+            return;
+        }
+        if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PRINT))
+        {
+            Share::renderPrintableModule($moduleModel, $template->parse(), $template->getData());
+        }
+        if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PDF))
+        {
 
+            return Share::renderPDFModule($moduleModel, $template->parse(), null);
+        }
+        $current           = new \stdClass();
+        $current->headline = $article->headline;
+        $current->title    = $article->title;
+        $share             = new Share($moduleModel, $current);
+        $template->share   = $share->generate();
+
+    }
+
+    private function checkRequestForShareParameter($model, $buffer = '', $module = null)
+    {
+        if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PRINT))
+        {
+            return Share::renderPrintableModule($model, $buffer, $module);
+        } elseif (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PDF))
+        {
+            return Share::renderPDFModule($model, $buffer, $module);
+        } else
+        {
+            return false;
+        }
     }
 
 }

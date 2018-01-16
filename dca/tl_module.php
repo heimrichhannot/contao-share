@@ -48,7 +48,7 @@ $arrFields = [
         'exclude'   => true,
         'inputType' => 'checkboxWizard',
         'reference' => $GLOBALS['TL_LANG']['tl_module']['references']['share_buttons'],
-        'options'   => ['pdfButton', 'printButton', 'mailto', 'feedback', 'facebook', 'twitter', 'gplus'],
+        'options'   => ['pdfButton', 'printButton', 'printWithoutTemplate', 'mailto', 'feedback', 'facebook', 'twitter', 'gplus'],
         'eval'      => ['multiple' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true],
         'sql'       => "blob NULL",
     ],
@@ -57,7 +57,7 @@ $arrFields = [
         'exclude'          => true,
         'inputType'        => 'select',
         'options_callback' => ['HeimrichHannot\Share\Backend\Module', 'getPrintSoloTemplates'],
-        'eval'             => ['includeBlankOption' => false, 'chosen' => true, 'tl_class' => 'w50'],
+        'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
         'sql'              => "varchar(64) NOT NULL default ''",
     ],
     'share_pdfRenderer' => [
