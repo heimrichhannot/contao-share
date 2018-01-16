@@ -11,6 +11,7 @@
 namespace HeimrichHannot\Share;
 
 use Contao\FrontendTemplate;
+use Contao\Module;
 use Contao\ModuleArticle;
 use Contao\ModuleModel;
 use HeimrichHannot\Request\Request;
@@ -20,13 +21,13 @@ class Hooks
     /**
      * Support share print for modules
      *
-     * @param \ModuleModel $objModel
+     * @param ModuleModel $objModel
      * @param string $strBuffer
-     * @param \Module $objModule
+     * @param Module $objModule
      *
      * @return string
      */
-    public static function getFrontendModuleHook(\ModuleModel $objModel, $strBuffer, \Module $objModule)
+    public static function getFrontendModuleHook($objModel, $strBuffer, $objModule)
     {
         if (!$objModel->addShare)
         {
@@ -66,7 +67,6 @@ class Hooks
     /**
      * @param FrontendTemplate $template
      * @param array $data
-     * @param ModuleArticle $module
      */
     public function compileArticle($template, $data, $article)
     {
@@ -84,29 +84,12 @@ class Hooks
         }
         if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PDF))
         {
-
-            return Share::renderPDFModule($moduleModel, $template->parse(), null);
+            Share::renderPDFModule($moduleModel, $template->parse(), null);
         }
         $current           = new \stdClass();
         $current->headline = $article->headline;
         $current->title    = $article->title;
         $share             = new Share($moduleModel, $current);
         $template->share   = $share->generate();
-
     }
-
-    private function checkRequestForShareParameter($model, $buffer = '', $module = null)
-    {
-        if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PRINT))
-        {
-            return Share::renderPrintableModule($model, $buffer, $module);
-        } elseif (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_PDF))
-        {
-            return Share::renderPDFModule($model, $buffer, $module);
-        } else
-        {
-            return false;
-        }
-    }
-
 }

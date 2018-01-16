@@ -13,14 +13,14 @@ $dca['subpalettes']['addShare'] = 'shareModule';
 
 $fields = [
     'addShare'    => [
-        'label'     => &$GLOBALS['TL_LANG']['tl_module']['addShare'],
+        'label'     => &$GLOBALS['TL_LANG']['tl_article']['addShare'],
         'exclude'   => true,
         'inputType' => 'checkbox',
         'eval'      => ['submitOnChange' => true],
         'sql'       => "char(1) NOT NULL default ''",
     ],
     'shareModule' => [
-        'label'            => &$GLOBALS['TL_LANG']['tl_module']['shareModule'],
+        'label'            => &$GLOBALS['TL_LANG']['tl_article']['shareModule'],
         'exclude'          => true,
         'inputType'        => 'select',
         'options_callback' => ['HeimrichHannot\Share\Backend\Module', 'getModuleWithShare'],

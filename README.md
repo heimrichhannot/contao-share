@@ -6,61 +6,94 @@ A helper module for pdf-print, print and social share functionality based on boo
 ## Features
 
 - news & calendar support
-- pdf-print-button
-- print-button
-- ical-event-button
-- mailto-button
-- feedback-button
-- dropdown menu with facebook/twitter/googleplus share
+- add syndication to modules and articles
+- syndication options:
+    - print pdf
+    - print by a custom module template or call the default browser print fun
+    - ical-event
+    - mailto
+    - feedback
+    - facebook share
+    - twitter share
+    - googleplus share
 
 ## Usage
 
-### Add Share to your module palette
+### Setup for modules
 
-Add the following Syntax to your module palette:
+##### Add Share to your module palette
+
+Add `{share_legend},addShare;` to your model default palette.
+
+Example: 
 ```
-$dc['palettes']['your-module'] = ...{share_legend},addShare;...
+$dca = &$GLOBALS['TL_DCA']['tl_module'];
+$dca['palettes']['newsreader'] = str_replace(
+    '{image_legend',
+    '{share_legend},addShare;{image_legend',
+    $dca['palettes']['newsreader']
+);
 ```
 
-### Generate share output example
-Use the return value in your module to render share links, if choosen in the module settings.
+
+##### Generate share output
+
+To show the share buttons in your module, you need to add the return of `Settings->generate()` to your template.
+
+Example:
 
 ```
+// Module class: 
+
+public function compile()
+{
+...
+    $this->Template->share = $this->generateShare();
+...
+}
+
 protected function generateShare()
+{
+    if ($this->addShare)
     {
-        if ($this->addShare)
-        {
-            $objShare = new \HeimrichHannot\Share\Share($this->objModel, [Entity to print]);
+        $objShare = new \HeimrichHannot\Share\Share($this->objModel, [Entity to print]);
 
-            return $objShare->generate();
-        }
-        return null;
+        return $objShare->generate();
     }
+    return null;
+}
+
+// Template file:
+
+<?= $this->share ?>
 ```
+
+### Setup for articles
+Since version 1.5 you can also print complete articles.
+
+1. Setup a new model, which has share enabled (=has addShare added to the module palette, the module type doesn't matter). This module will hold the settings for the article.
+
+2. Check "Add Syndication" on the article settings page and choose the module setup before.
+
+3. Echo `$this->share` in your article template.
+
 
 ### Custom name for your pdf files
 
 Your module has to implement `ModulePdfReaderInterface`. The return-value of  `getFileName()` is used as pdf file name. Don't add .pdf, it will be added by the module itself.
 
 
-### Template Syntax
-
-Add the following Syntax to your templates, to provide share links.
-
-```
-<?= $this->share; ?>
-```
-
 ### Print page
-
 To address your custom module print layout, the url must contain the `print` parameter with the module id as value. (Example: `?print=57`). 
 The default print link will do that for you and will create a new tab/window and close it immediately after the window was printed by the user.
 To debug the print layout, add the `pDebug=1` parameter to your print url (Example: `?print=57&pDebug=1`).
 
 For regions within your templates that should not be printable, add `<!-- print::stop -->` before that region and `<!-- print::continue -->` afterwards.
 
+It is also possible to simple call the browser print windows to print the complete page by checking 'printWithoutTemplate' withing the syndication selection in module settings.
+
 ```
 <!-- print::stop -->
 DO NOT PRINT THIS!
 <!-- print::continue -->
-``` 
+```

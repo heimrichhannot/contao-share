@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2018-01-16
+
+#### Added
+- add share to articles
+- force print without template (=print page) even if print template is set (added printWithoutTemplate option)
+
 ## [1.4.1] - 2017-10-10
 
 ### Fixed
