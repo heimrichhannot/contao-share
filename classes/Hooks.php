@@ -12,6 +12,7 @@ namespace HeimrichHannot\Share;
 
 use Contao\FrontendTemplate;
 use Contao\ModuleArticle;
+use Contao\ModuleModel;
 use HeimrichHannot\Request\Request;
 
 class Hooks
@@ -44,14 +45,17 @@ class Hooks
      * @param string $buffer
      * @param ModuleArticle $article
      */
-    public function printArticleAsPdf ($buffer, $module)
+    public function printArticleAsPdf ($buffer, $article)
     {
-        if (!$module->addShare)
+        if (!$article->addShare)
         {
             return;
         }
-
-
+        if (!$module = ModuleModel::findById($article->shareModule))
+        {
+            return;
+        }
+        Share::renderPDFModule($module, $buffer, null, true);
     }
 
     /**

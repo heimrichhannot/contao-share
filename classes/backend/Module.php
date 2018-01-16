@@ -67,7 +67,11 @@ class Module extends Backend
     public static function getModuleWithShare ()
     {
         $modules = ModuleModel::findBy('addShare', '1');
-        return $modules;
+        foreach ($modules as $module)
+        {
+            $values[$module->id] = $module->name.' ['.$module->type.'] (ID:'.$module->id.')';
+        }
+        return $values;
     }
 
 }

@@ -370,9 +370,9 @@ class Share extends \Frontend
         Share::renderPDFModule($this->objModel, $this->strItem, $this->objModule);
     }
 
-    public static function renderPDFModule($objModel, $strBuffer, $objModule)
+    public static function renderPDFModule($objModel, $strBuffer, $objModule = null, $noGetCheck = false)
     {
-        if (Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $objModel->id) {
+        if (!$noGetCheck && Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $objModel->id) {
             return;
         }
         $strFileName = null;

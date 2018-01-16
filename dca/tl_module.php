@@ -57,7 +57,7 @@ $arrFields = [
         'exclude'          => true,
         'inputType'        => 'select',
         'options_callback' => ['HeimrichHannot\Share\Backend\Module', 'getPrintSoloTemplates'],
-        'eval'             => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
+        'eval'             => ['includeBlankOption' => false, 'chosen' => true, 'tl_class' => 'w50'],
         'sql'              => "varchar(64) NOT NULL default ''",
     ],
     'share_pdfRenderer' => [
