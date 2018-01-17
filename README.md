@@ -90,10 +90,10 @@ To debug the print layout, add the `pDebug=1` parameter to your print url (Examp
 
 For regions within your templates that should not be printable, add `<!-- print::stop -->` before that region and `<!-- print::continue -->` afterwards.
 
-It is also possible to simple call the browser print windows to print the complete page by checking 'printWithoutTemplate' withing the syndication selection in module settings.
-
 ```
 <!-- print::stop -->
 DO NOT PRINT THIS!
 <!-- print::continue -->
 ```
+
+It is also possible to simple call the browser print windows to print the complete page by checking 'printWithoutTemplate' withing the syndication selection in module settings.
