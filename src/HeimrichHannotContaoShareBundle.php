@@ -6,9 +6,9 @@
  * @license LGPL-3.0+
  */
 
-namespace HeimrichHannot\ShareBundle;
+namespace HeimrichHannot\SyndicationBundle;
 
-use HeimrichHannot\ShareBundle\DependencyInjection\HeimrichHannotContaoShareExtension;
+use HeimrichHannot\SyndicationBundle\DependencyInjection\HeimrichHannotContaoShareExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class HeimrichHannotContaoShareBundle extends Bundle

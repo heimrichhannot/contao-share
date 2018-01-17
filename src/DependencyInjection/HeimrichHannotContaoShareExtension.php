@@ -6,7 +6,7 @@
  * @license LGPL-3.0+
  */
 
-namespace HeimrichHannot\ShareBundle\DependencyInjection;
+namespace HeimrichHannot\SyndicationBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

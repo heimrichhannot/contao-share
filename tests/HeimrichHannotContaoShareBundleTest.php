@@ -6,10 +6,10 @@
  * @license LGPL-3.0+
  */
 
-namespace HeimrichHannot\ShareBundle\Test;
+namespace HeimrichHannot\SyndicationBundle\Test;
 
-use HeimrichHannot\ShareBundle\DependencyInjection\HeimrichHannotContaoShareExtension;
-use HeimrichHannot\ShareBundle\HeimrichHannotContaoShareBundle;
+use HeimrichHannot\SyndicationBundle\DependencyInjection\HeimrichHannotContaoShareExtension;
+use HeimrichHannot\SyndicationBundle\HeimrichHannotContaoShareBundle;
 use PHPUnit\Framework\TestCase;
 
 class HeimrichHannotContaoShareBundleTest extends TestCase

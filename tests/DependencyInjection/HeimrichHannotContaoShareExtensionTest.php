@@ -6,9 +6,9 @@
  * @license LGPL-3.0+
  */
 
-namespace HeimrichHannot\ShareBundle\Test\DependencyInjection;
+namespace HeimrichHannot\SyndicationBundle\Test\DependencyInjection;
 
-use HeimrichHannot\ShareBundle\DependencyInjection\HeimrichHannotContaoShareExtension;
+use HeimrichHannot\SyndicationBundle\DependencyInjection\HeimrichHannotContaoShareExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;

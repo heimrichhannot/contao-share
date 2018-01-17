@@ -6,7 +6,7 @@
  * @license LGPL-3.0+
  */
 
-namespace HeimrichHannot\ShareBundle\EventListener;
+namespace HeimrichHannot\SyndicationBundle\EventListener;
 
 class HookListener
 {

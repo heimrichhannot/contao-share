@@ -6,7 +6,7 @@
  * @license LGPL-3.0+
  */
 
-namespace HeimrichHannot\ShareBundle\Components;
+namespace HeimrichHannot\SyndicationBundle\Components;
 
 interface ShareComponentInterface
 {

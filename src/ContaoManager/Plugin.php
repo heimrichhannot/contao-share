@@ -6,14 +6,14 @@
  * @license LGPL-3.0+
  */
 
-namespace HeimrichHannot\ShareBundle\ContaoManager;
+namespace HeimrichHannot\SyndicationBundle\ContaoManager;
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Config\ConfigInterface;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
-use HeimrichHannot\ShareBundle\HeimrichHannotContaoShareBundle;
+use HeimrichHannot\SyndicationBundle\HeimrichHannotContaoShareBundle;
 
 class Plugin implements BundlePluginInterface
 {

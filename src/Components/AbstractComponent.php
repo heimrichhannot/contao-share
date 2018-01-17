@@ -6,8 +6,14 @@
  * @license LGPL-3.0+
  */
 
-namespace HeimrichHannot\ShareBundle\Components;
+namespace HeimrichHannot\SyndicationBundle\Components;
 
 abstract class AbstractComponent
 {
+    public function getName()
+    {
+        return $this->getAlias();
+    }
+
+    abstract public function getAlias(): string;
 }

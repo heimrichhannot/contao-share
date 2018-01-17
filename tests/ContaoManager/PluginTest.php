@@ -6,13 +6,13 @@
  * @license LGPL-3.0+
  */
 
-namespace HeimrichHannot\ShareBundle\Test\ContaoManager;
+namespace HeimrichHannot\SyndicationBundle\Test\ContaoManager;
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\DelegatingParser;
-use HeimrichHannot\ShareBundle\ContaoManager\Plugin;
-use HeimrichHannot\ShareBundle\HeimrichHannotContaoShareBundle;
+use HeimrichHannot\SyndicationBundle\ContaoManager\Plugin;
+use HeimrichHannot\SyndicationBundle\HeimrichHannotContaoShareBundle;
 use PHPUnit\Framework\TestCase;
 
 class PluginTest extends TestCase
