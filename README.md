@@ -17,6 +17,7 @@ A helper module for pdf-print, print and social share functionality based on boo
     - twitter share
     - googleplus share
 
+
 ## Usage
 
 ### Setup for modules
@@ -68,6 +69,7 @@ protected function generateShare()
 <?= $this->share ?>
 ```
 
+
 ### Setup for articles
 Since version 1.5 you can also print complete articles.
 
@@ -84,6 +86,7 @@ Your module has to implement `ModulePdfReaderInterface`. The return-value of  `g
 
 
 ### Print page
+
 To address your custom module print layout, the url must contain the `print` parameter with the module id as value. (Example: `?print=57`). 
 The default print link will do that for you and will create a new tab/window and close it immediately after the window was printed by the user.
 To debug the print layout, add the `pDebug=1` parameter to your print url (Example: `?print=57&pDebug=1`).
