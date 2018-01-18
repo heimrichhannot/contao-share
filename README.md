@@ -84,7 +84,7 @@ Since version 1.5 you can also print complete articles.
 
 Your module has to implement `ModulePdfReaderInterface`. The return-value of  `getFileName()` is used as pdf file name. Don't add .pdf, it will be added by the module itself.
 
-
+1
 ### Print page
 
 To address your custom module print layout, the url must contain the `print` parameter with the module id as value. (Example: `?print=57`). 
