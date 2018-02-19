@@ -12,6 +12,7 @@
 namespace HeimrichHannot\Share;
 
 
+use Contao\Input;
 use Contao\Model;
 use Contao\Module;
 use Contao\ModuleModel;
@@ -142,7 +143,7 @@ class Share extends \Frontend
             if (!$objModule->addShare) {
                 return;
             }
-            Request::setGet(static::SHARE_REQUEST_PARAMETER_PDF, null);
+            Input::setGet(static::SHARE_REQUEST_PARAMETER_PDF, false);
             $this->strItem = $objModule->generate();
             $this->generatePdf();
         }
@@ -390,7 +391,7 @@ class Share extends \Frontend
         if (!$noGetCheck && Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $objModel->id) {
             return;
         }
-        Request::setGet(static::SHARE_REQUEST_PARAMETER_PDF, null);
+        Input::setGet(static::SHARE_REQUEST_PARAMETER_PDF, false);
         $strFileName = null;
 
         if ($objModule instanceof ModulePdfReaderInterface) {

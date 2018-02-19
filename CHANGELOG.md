@@ -1,13 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.2] - 2018-02-19
+
+#### Fixed
+- bug introduced in 1.5.1
+
 ## [1.5.1] - 2018-02-19
 
 #### Fixed
 - no pdf rendering if called via compiler method
 
 #### Changed
-- code enhancements1
+- code enhancements
 
 ## [1.5.0] - 2018-01-16
 
