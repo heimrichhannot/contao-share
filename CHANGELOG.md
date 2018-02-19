@@ -7,8 +7,7 @@ All notable changes to this project will be documented in this file.
 - no pdf rendering if called via compiler method
 
 #### Changed
-- make more use of the request class
-- code optimizations
+- code enhancements1
 
 ## [1.5.0] - 2018-01-16
 
