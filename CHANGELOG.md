@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.1] - 2018-02-19
+
+#### Fixed
+- no pdf rendering if called via compiler method
+
+#### Changed
+- make more use of the request class
+- code optimizations
+
 ## [1.5.0] - 2018-01-16
 
 #### Added

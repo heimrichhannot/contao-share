@@ -12,6 +12,7 @@
 namespace HeimrichHannot\Share;
 
 
+use Contao\Model;
 use Contao\Module;
 use Contao\ModuleModel;
 use HeimrichHannot\Haste\Util\Url;
@@ -132,7 +133,7 @@ class Share extends \Frontend
         }
 
         // PDF
-        if (strlen(\Input::get(Share::SHARE_REQUEST_PARAMETER_PDF))) {
+        if (Request::hasGet(static::SHARE_REQUEST_PARAMETER_PDF)) {
             $strClass = \Module::findClass($this->objModel->type);
             if (!class_exists($strClass)) {
                 return;
@@ -141,7 +142,7 @@ class Share extends \Frontend
             if (!$objModule->addShare) {
                 return;
             }
-            \Input::setGet("pdf", false);  // prevent endless loops, because of generate
+            Request::setGet(static::SHARE_REQUEST_PARAMETER_PDF, null);
             $this->strItem = $objModule->generate();
             $this->generatePdf();
         }
@@ -373,14 +374,23 @@ class Share extends \Frontend
      */
     public function generatePdf()
     {
-        Share::renderPDFModule($this->objModel, $this->strItem, $this->objModule);
+        Share::renderPDFModule($this->objModel, $this->strItem, $this->objModule, true);
     }
 
+
+
+    /**
+     * @param Model $objModel
+     * @param string $strBuffer
+     * @param ModuleModel $objModule
+     * @param bool $noGetCheck No additional check, if correct get parameter is set
+     */
     public static function renderPDFModule($objModel, $strBuffer, $objModule = null, $noGetCheck = false)
     {
         if (!$noGetCheck && Request::getGet(Share::SHARE_REQUEST_PARAMETER_PDF) != $objModel->id) {
             return;
         }
+        Request::setGet(static::SHARE_REQUEST_PARAMETER_PDF, null);
         $strFileName = null;
 
         if ($objModule instanceof ModulePdfReaderInterface) {
