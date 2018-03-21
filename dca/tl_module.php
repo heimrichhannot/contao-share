@@ -25,7 +25,7 @@ $arrDca['palettes']['__selector__'][] = 'share_pdfRenderer';
 /**
  * Subpalettes
  */
-$arrDca['subpalettes']['addShare'] = 'share_buttons';
+$arrDca['subpalettes']['addShare'] = 'share_buttons,share_addTemplateLinks';
 
 $arrDca['subpalettes']['share_pdfRenderer_tcpdf'] = 'share_pdfShowInline,share_pdfCssSRC,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSRC,share_pdfFontSize,share_pdfFooterText';
 $arrDca['subpalettes']['share_pdfRenderer_mpdf'] = 'share_pdfShowInline,share_pdfLogoSRC,share_pdfLogoSize,share_pdfFontSize';
@@ -155,6 +155,12 @@ $arrFields = [
         'inputType'        => 'text',
         'eval'             => ['tl_class' => 'w50 clr'],
         'sql'              => "varchar(128) NOT NULL default ''",
+    ],
+    'share_addTemplateLinks'             => [
+        'label'     => &$GLOBALS['TL_LANG']['tl_module']['share_addTemplateLinks'],
+        'exclude'   => true,
+        'inputType' => 'checkbox',
+        'sql'       => "char(1) NOT NULL default ''",
     ],
 ];
 

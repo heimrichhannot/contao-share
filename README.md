@@ -43,14 +43,14 @@ To show the share buttons in your module, you need to add the return of `Setting
 
 Example:
 
-```
+```php
 // Module class: 
 
 public function compile()
 {
-...
-    $this->Template->share = $this->generateShare();
-...
+    ...
+    $this->generateShare();
+    ...
 }
 
 protected function generateShare()
@@ -59,7 +59,7 @@ protected function generateShare()
     {
         $objShare = new \HeimrichHannot\Share\Share($this->objModel, [Entity to print]);
 
-        return $objShare->generate();
+        $this->template->share = $objShare->generate();
     }
     return null;
 }
@@ -68,6 +68,22 @@ protected function generateShare()
 
 <?= $this->share ?>
 ```
+
+#### Add Share urls to your template
+
+```php
+// Add this to the generateShare method from above, after calling generate():
+if ($this->module->share_addTemplateLinks)
+{
+    $this->template->shareUrls = $objShare->generateShareUrls();
+}
+```
+
+This will add an array to the template with following key containing just the urls:
+* mailto
+* facebook
+* twitter
+* gplus
 
 
 ### Setup for articles

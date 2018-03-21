@@ -164,6 +164,16 @@ class Share extends \Frontend
         return $this->Template->parse();
     }
 
+    public function generateShareUrls()
+    {
+        $list = [];
+        $list['mailto'] = $this->Template->mailto;
+        $list['facebook'] = $this->Template->facebookShareUrl;
+        $list['twitter'] = $this->Template->twitterShareUrl;
+        $list['gplus'] = $this->Template->gplusShareUrl;
+        return $list;
+    }
+
 
     protected function compile()
     {

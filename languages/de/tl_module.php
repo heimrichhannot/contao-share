@@ -62,6 +62,9 @@ $arrLang['share_feedbackEmail'][1] = 'Geben Sie hier die E-Mail-Adresse ein, an 
 $arrLang['share_feedbackSubject'][0] = 'Betreff (Feedback)';
 $arrLang['share_feedbackSubject'][1] = 'Geben Sie hier den Betreff ein, der dem Feedback-mailto-Link hinzugefügt werden soll. Wenn Sie nichts eingeben, wird der Titel der geteilten Entität genutzt. Sie können im Text mit "%s" auch den Titel der geteilten Entität referenzieren.';
 
+$arrLang['share_addTemplateLinks'][0] = 'Share Url zum Template hinzufügen';
+$arrLang['share_addTemplateLinks'][1] = 'Fügt eine zusätzliche Template-Variable zum Template hinzu, welche die Share Urls enthält.';
+
 /**
  * Legends
  */
@@ -72,6 +75,7 @@ $arrLang['share_legend'] = 'Share-Einstellungen';
  */
 $arrLang['references']['share_buttons']['pdfButton']   = 'Beitrag als PDF';
 $arrLang['references']['share_buttons']['printButton'] = 'Beitrag Drucken';
+$arrLang['references']['share_buttons']['printWithoutTemplate'] = 'Beitrag Drucken ohne Template';
 $arrLang['references']['share_buttons']['facebook']    = 'Auf Facebook teilen';
 $arrLang['references']['share_buttons']['twitter']     = 'Auf Twitter teilen';
 $arrLang['references']['share_buttons']['gplus']       = 'Auf Google+ teilen';

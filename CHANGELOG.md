@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.6.0] - 2018-03-21
+
+#### Added
+- option to add share urls to template
+- updated translations
+
 ## [1.5.2] - 2018-02-19
 
 #### Fixed
