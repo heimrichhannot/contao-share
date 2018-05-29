@@ -30,7 +30,7 @@
     "heimrichhannot/contao-request": "^1.1"
   },
   "suggest": {
-    "mpdf/mpdf": "~6.1"
+    "mpdf/mpdf": "^7.0"
   },
   "autoload": {
     "classmap": [

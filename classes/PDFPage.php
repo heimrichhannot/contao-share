@@ -13,23 +13,23 @@ namespace HeimrichHannot\Share;
 
 
 use HeimrichHannot\Share\PdfModule\WkhtmltopdfModule;
+use Mpdf\Mpdf;
 
 class PDFPage extends PrintPage
 {
-    protected $fileName = 'download';
-    protected $outputInline = true;
-    protected $renderer = 'tcpdf';
+    protected $fileName      = 'download';
+    protected $outputInline  = true;
+    protected $renderer      = 'tcpdf';
     protected $loginUsername = '';
     protected $loginPassword = '';
 
     public function __construct($objModel, $strBuffer, array $arrConfig = [])
     {
         $this->objModel = $objModel;
-        $strTemplate = $this->objModel->share_customPrintTpl;
+        $strTemplate    = $this->objModel->share_customPrintTpl;
 
         $renderer = $objModel->share_pdfRenderer;
-        if (!empty($renderer))
-        {
+        if (!empty($renderer)) {
             $this->renderer = $renderer;
         }
 
@@ -62,6 +62,7 @@ class PDFPage extends PrintPage
 
     /**
      * Set if the PDF output should be inline or download
+     *
      * @param bool $outputInline
      */
     public function setOutputInline($outputInline)
@@ -90,12 +91,12 @@ class PDFPage extends PrintPage
         return;
     }
 
-    protected function generateOutput ($blnCheckRequest)
+    protected function generateOutput($blnCheckRequest)
     {
         return $this->generatePDF($this->Template->parse());
     }
 
-    public function generatePDF ($strArticle)
+    public function generatePDF($strArticle)
     {
         ob_clean();
 
@@ -103,12 +104,6 @@ class PDFPage extends PrintPage
         $strArticle = $this->replaceInsertTags($strArticle, false);
         $strArticle = html_entity_decode($strArticle, ENT_QUOTES, \Config::get('characterSet'));
         $strArticle = $this->convertRelativeUrls($strArticle, '', true);
-
-        //Remove Links due TCPDF bug
-        $strArticle = preg_replace('/<a\s.*?>(.*?)<\/a>/xsi', '${1}', $strArticle);
-        // change https image src to http
-        $strArticle = preg_replace('/(?<=src=\")https:/xsi', 'http:', $strArticle);
-
 
         if ($this->renderer == 'wkhtmltopdf') {
             $pdf = new WkhtmltopdfModule();
@@ -119,41 +114,39 @@ class PDFPage extends PrintPage
             $pdf->compile();
         }
 
-        if ($this->renderer === 'mpdf')
-        {
-            $pdf = new \mPDF();
+        if ($this->renderer === 'mpdf') {
+            $pdf = new Mpdf(['tempDir' => '/tmp', 'mode' => 'utf-8']);
             // Add an custom logo
-            if (!empty($this->objModel->share_pdfLogoSRC))
-            {
+            if (!empty($this->objModel->share_pdfLogoSRC)) {
                 $objModel = \FilesModel::findByUuid($this->objModel->share_pdfLogoSRC);
-                if (!empty($objModel) && is_file(TL_ROOT . '/' . $objModel->path))
-                {
+                if (!empty($objModel) && is_file(TL_ROOT . '/' . $objModel->path)) {
                     $imgWidth  = 50;
                     $imgHeight = 50;
-                    $imgSize = deserialize($this->objModel->share_pdfLogoSize, true);
-                    if (!empty($imgSize[0]))
-                    {
+                    $imgSize   = deserialize($this->objModel->share_pdfLogoSize, true);
+                    if (!empty($imgSize[0])) {
                         $imgWidth = $imgSize[0];
                     }
-                    if (!empty($imgSize[1]))
-                    {
+                    if (!empty($imgSize[1])) {
                         $imgHeight = $imgSize[1];
                     }
-                    $pdf->orig_tMargin = $this->objModel->share_pdfFontSize;
-                    $pdf->margin_header = $this->objModel->share_pdfFontSize;
-//                    $pdf->margin_header = $imgHeight + $this->objModel->share_pdfFontSize;
+                    $pdf->orig_tMargin     = $this->objModel->share_pdfFontSize;
+                    $pdf->margin_header    = $this->objModel->share_pdfFontSize;
+                    $pdf->margin_header    = $imgHeight + $this->objModel->share_pdfFontSize;
                     $pdf->setAutoTopMargin = 'pad';
 
-                    $pdf->SetHTMLHeader('<img src="'.$objModel->path.'" width="'.$imgWidth.'" height="'.$imgHeight.'" style="margin: 0 2em 0 2em">');
-
-
+                    $pdf->SetHTMLHeader('<img src="' . $objModel->path . '" width="' . $imgWidth . '" height="' . $imgHeight . '" style="margin: 0 2em 0 2em">');
                 }
             }
-
-            $pdf->WriteHTML($strArticle, 0);
+            $pdf->WriteHTML($strArticle);
             $outputInline = $this->getOutputInline() ? "I" : "D";
-            $pdf->Output($this->getFileName().'.pdf', $outputInline);
+            $pdf->Output($this->getFileName() . '.pdf', $outputInline);
+            exit;
         }
+
+        //Remove Links due TCPDF bug
+        $strArticle = preg_replace('/<a\s.*?>(.*?)<\/a>/xsi', '${1}', $strArticle);
+        // change https image src to http
+        $strArticle = preg_replace('/(?<=src=\")https:/xsi', 'http:', $strArticle);
 
         // Remove form elements and JavaScript links and scripts
         $arrSearch = [
@@ -165,34 +158,22 @@ class PDFPage extends PrintPage
         $strArticle = preg_replace($arrSearch, '', $strArticle);
 
         // HOOK: allow individual PDF routines
-        if (isset($GLOBALS['TL_HOOKS']['printShareItemAsPdf']) && is_array($GLOBALS['TL_HOOKS']['printShareItemAsPdf']))
-        {
-            foreach ($GLOBALS['TL_HOOKS']['printShareItemAsPdf'] as $callback)
-            {
+        if (isset($GLOBALS['TL_HOOKS']['printShareItemAsPdf']) && is_array($GLOBALS['TL_HOOKS']['printShareItemAsPdf'])) {
+            foreach ($GLOBALS['TL_HOOKS']['printShareItemAsPdf'] as $callback) {
                 $this->import($callback[0]);
                 $this->{$callback[0]}->{$callback[1]}($strArticle, $this);
             }
         }
 
         // URL decode image paths (see #6411)
-        $strArticle = preg_replace_callback(
-            '@(src="[^"]+")@',
-            function ($arg)
-            {
-                return rawurldecode($arg[0]);
-            },
-            $strArticle
-        );
+        $strArticle = preg_replace_callback('@(src="[^"]+")@', function ($arg) {
+            return rawurldecode($arg[0]);
+        }, $strArticle);
 
         // Handle line breaks in preformatted text
-        $strArticle = preg_replace_callback(
-            '@(<pre.*</pre>)@Us',
-            function ($arg)
-            {
-                return str_replace("\n", '<br>', $arg[0]);
-            },
-            $strArticle
-        );
+        $strArticle = preg_replace_callback('@(<pre.*</pre>)@Us', function ($arg) {
+            return str_replace("\n", '<br>', $arg[0]);
+        }, $strArticle);
 
         // Default PDF export using TCPDF
         $arrSearch = [
@@ -215,7 +196,7 @@ class PDFPage extends PrintPage
 
         $strArticle = preg_replace($arrSearch, $arrReplace, $strArticle);
 
-//        $strBuffer = static::renderPrintableModule()
+//        $strBuffer = static::renderPrintableModule();
 
         // TCPDF configuration
         $l['a_meta_dir']      = 'ltr';
@@ -241,8 +222,7 @@ class PDFPage extends PrintPage
 
 
         // Add custom fonts
-        if ($this->objModel->share_pdfFontSRC != null)
-        {
+        if ($this->objModel->share_pdfFontSRC != null) {
             $this->addCustomFontsToPDF($pdf, deserialize($this->objModel->share_pdfFontSRC, true));
         }
 
@@ -271,24 +251,20 @@ class PDFPage extends PrintPage
         $pdf->AddPage();
 
         // Add an custom logo
-        if ($this->objModel->share_pdfLogoSRC != '')
-        {
+        if ($this->objModel->share_pdfLogoSRC != '') {
             $objModel = \FilesModel::findByUuid($this->objModel->share_pdfLogoSRC);
 
-            if ($objModel !== null && is_file(TL_ROOT . '/' . $objModel->path))
-            {
+            if ($objModel !== null && is_file(TL_ROOT . '/' . $objModel->path)) {
                 $imgWidth  = 50;
                 $imgHeight = 0;
 
                 $imgSize = deserialize($this->objModel->share_pdfLogoSize, true);
 
-                if ($imgSize[0])
-                {
+                if ($imgSize[0]) {
                     $imgWidth = $imgSize[0];
                 }
 
-                if ($imgSize[1])
-                {
+                if ($imgSize[1]) {
                     $imgHeight = $imgSize[1];
                 }
 
@@ -302,12 +278,10 @@ class PDFPage extends PrintPage
         }
 
         // Add an custom css
-        if ($this->objModel->share_pdfCssSRC != '')
-        {
+        if ($this->objModel->share_pdfCssSRC != '') {
             $objModel = \FilesModel::findByUuid($this->objModel->share_pdfCssSRC);
 
-            if ($objModel !== null && is_file(TL_ROOT . '/' . $objModel->path))
-            {
+            if ($objModel !== null && is_file(TL_ROOT . '/' . $objModel->path)) {
                 $css = '<style>' . file_get_contents(TL_ROOT . '/' . $objModel->path) . '</style>';
             }
         }
@@ -326,7 +300,7 @@ class PDFPage extends PrintPage
             $title = standardize(ampersand($this->objCurrent->title, false));
         }
         $outputInline = $this->getOutputInline() ? "I" : "D";
-        $pdf->Output( $title . '.pdf', $outputInline);
+        $pdf->Output($title . '.pdf', $outputInline);
 
         // Stop script execution
         exit;
@@ -336,15 +310,12 @@ class PDFPage extends PrintPage
     {
         $objModels = \FilesModel::findMultipleByUuids($arrFonts);
 
-        if ($objModels === null)
-        {
+        if ($objModels === null) {
             return false;
         }
 
-        while ($objModels->next())
-        {
-            if (!file_exists(TL_ROOT . '/' . $objModels->path))
-            {
+        while ($objModels->next()) {
+            if (!file_exists(TL_ROOT . '/' . $objModels->path)) {
                 continue;
             }
 

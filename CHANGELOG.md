@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## [1.7.0] - 2018-05-29
+
+#### Added
+- mpdf 7.0 compatibility
+
 ## [1.6.0] - 2018-03-21
 
 #### Added
