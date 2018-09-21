@@ -57,7 +57,7 @@ class PrintPage extends \PageRegular
      * Generate a print page
      *
      * @param \PageModel $objPage
-     * @param boolean $blnCheckRequest
+     * @param boolean    $blnCheckRequest
      */
     public function generate($objPage, $blnCheckRequest = false)
     {
@@ -131,16 +131,16 @@ class PrintPage extends \PageRegular
     protected function generateHead($objPage)
     {
         // toggle print dialog
-        $strScript = 'window.print();';
+        $strScript = 'setTimeout(window.print, 100);';
 
         // close dialog if not in debug mode
         if (!Request::hasGet('pDebug')) {
-            $strScript .= 'setTimeout(window.close, 0);';
+            $strScript .= 'setTimeout(window.close, 100);';
         } else {
             return;
         }
 
-        $this->Template->head = \Template::generateInlineScript($strScript, $objPage->outputFormat != 'html5');
+        $this->Template->head = \Template::generateInlineScript($strScript);
     }
 
     protected function generateOutput($blnCheckRequest)
@@ -167,8 +167,8 @@ class PrintPage extends \PageRegular
         }
 
 
-	// clear the buffer	
-	ob_clean();
+        // clear the buffer
+        ob_clean();
 
         if (version_compare(VERSION, '4.0', '<')) {
             // Print the template to the screen
@@ -221,7 +221,6 @@ class PrintPage extends \PageRegular
 
             exit;
         }
-
     }
 
     /**
@@ -262,8 +261,8 @@ class PrintPage extends \PageRegular
     /**
      * Set an object property
      *
-     * @param string $strKey The property name
-     * @param mixed $varValue The property value
+     * @param string $strKey   The property name
+     * @param mixed  $varValue The property value
      */
     public function __set($strKey, $varValue)
     {

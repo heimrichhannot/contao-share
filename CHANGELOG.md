@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.7.1] - 2018-09-21
+
+#### fixed
+- fixed printing in safari. added delay of function call window.print cause otherwise the content is not loaded yet
+
 ## [1.7.0] - 2018-05-29
 
 #### Added
