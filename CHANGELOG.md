@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.7.2] - 2019-02-21
+
+#### Fixed
+- ical generation not using corrent event id
+
 ## [1.7.1] - 2018-09-21
 
 #### fixed

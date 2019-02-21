@@ -189,7 +189,7 @@ class Share extends \Frontend
         }
 
         $this->Template->pdfUrl  = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PDF . '=' . $this->id);
-        $this->Template->icalUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_ICAL . '=' . $this->id);
+        $this->Template->icalUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_ICAL . '=' . $this->objCurrent->id);
         $this->Template->icalUrl = Url::addQueryString('title=Termin speichern', $this->Template->icalUrl);
 
         $this->rawUrl   = Url::getCurrentUrl();
