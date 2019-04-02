@@ -20,3 +20,8 @@ $GLOBALS['TL_HOOKS']['printArticleAsPdf']['share'] = ['HeimrichHannot\Share\Hook
  * Content elements
  */
 $GLOBALS['TL_CTE']['includes']['module'] = 'HeimrichHannot\Share\Elements\ContentModule';
+
+/**
+ * Skip print for search index
+ */
+$GLOBALS['TL_NOINDEX_KEYS'][] = 'print';

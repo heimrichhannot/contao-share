@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.7.3] - 2019-04-02
+
+#### Removed
+- print versions from search index
 
 ## [1.7.2] - 2019-02-21
 
