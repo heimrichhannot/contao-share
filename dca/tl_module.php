@@ -48,7 +48,7 @@ $arrFields = [
         'exclude'   => true,
         'inputType' => 'checkboxWizard',
         'reference' => $GLOBALS['TL_LANG']['tl_module']['references']['share_buttons'],
-        'options'   => ['pdfButton', 'printButton', 'printWithoutTemplate', 'mailto', 'feedback', 'facebook', 'twitter', 'gplus'],
+        'options'   => ['pdfButton', 'printButton', 'printWithoutTemplate', 'mailto', 'feedback', 'facebook', 'twitter', 'linkedin', 'whatsapp'],
         'eval'      => ['multiple' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true],
         'sql'       => "blob NULL",
     ],

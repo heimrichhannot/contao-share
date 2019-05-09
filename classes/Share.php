@@ -70,7 +70,8 @@ class Share extends \Frontend
             $this->feedback             = false;
             $this->facebook             = false;
             $this->twitter              = false;
-            $this->gplus                = false;
+            $this->whatsapp             = false;
+            $this->linkedin             = false;
 
             foreach ($arrButtons as $key => $strType) {
                 $this->{$strType} = true;
@@ -83,26 +84,28 @@ class Share extends \Frontend
         switch ($strType) {
             case 'newsreader':
             case 'newsreader_plus':
-            $this->pdfButton            = true;
-            $this->printButton          = true;
-            $this->printWithoutTemplate = false;
-            $this->mailto               = true;
-            $this->feedback             = true;
-            $this->facebook             = true;
-            $this->twitter              = true;
-            $this->gplus                = true;
+                $this->pdfButton            = true;
+                $this->printButton          = true;
+                $this->printWithoutTemplate = false;
+                $this->mailto               = true;
+                $this->feedback             = true;
+                $this->facebook             = true;
+                $this->twitter              = true;
+                $this->whatsapp             = true;
+                $this->linkedin             = true;
                 break;
             case 'eventreader':
             case 'eventreader_plus':
-            $this->pdfButton            = true;
-            $this->printButton          = true;
-            $this->printWithoutTemplate = false;
-            $this->mailto               = true;
-            $this->feedback             = true;
-            $this->icalButton           = true;
-            $this->facebook             = true;
-            $this->twitter              = true;
-            $this->gplus                = true;
+                $this->pdfButton            = true;
+                $this->printButton          = true;
+                $this->printWithoutTemplate = false;
+                $this->mailto               = true;
+                $this->feedback             = true;
+                $this->icalButton           = true;
+                $this->facebook             = true;
+                $this->twitter              = true;
+                $this->whatsapp             = true;
+                $this->linkedin             = true;
                 break;
             default:
                 $this->pdfButton            = true;
@@ -113,7 +116,8 @@ class Share extends \Frontend
                 $this->icalButton           = false;
                 $this->facebook             = true;
                 $this->twitter              = true;
-                $this->gplus                = true;
+                $this->whatsapp             = true;
+                $this->linkedin             = true;
         }
     }
 
@@ -166,11 +170,11 @@ class Share extends \Frontend
 
     public function generateShareUrls()
     {
-        $list = [];
-        $list['mailto'] = $this->Template->mailto;
+        $list             = [];
+        $list['mailto']   = $this->Template->mailto;
         $list['facebook'] = $this->Template->facebookShareUrl;
-        $list['twitter'] = $this->Template->twitterShareUrl;
-        $list['gplus'] = $this->Template->gplusShareUrl;
+        $list['twitter']  = $this->Template->twitterShareUrl;
+        $list['linkedin'] = $this->Template->linedinShareUrl;
         return $list;
     }
 
@@ -208,7 +212,8 @@ class Share extends \Frontend
 
         $this->Template->facebookShareUrl = $this->generateSocialLink("facebook");
         $this->Template->twitterShareUrl  = $this->generateSocialLink("twitter");
-        $this->Template->gplusShareUrl    = $this->generateSocialLink("gplus");
+        $this->Template->linkedinShareUrl  = $this->generateSocialLink("linkedin");
+        $this->Template->whatsappShareUrl  = $this->generateSocialLink("whatsapp");
 
         $this->Template->printAttributes =
         $this->Template->printTitle = specialchars($GLOBALS['TL_LANG']['MSC']['printPage']);
@@ -216,13 +221,15 @@ class Share extends \Frontend
         $this->Template->mailtoTitle     = specialchars($GLOBALS['TL_LANG']['MSC']['mailtoTitle']);
         $this->Template->facebookTitle   = specialchars($GLOBALS['TL_LANG']['MSC']['facebookShare']);
         $this->Template->twitterTitle    = specialchars($GLOBALS['TL_LANG']['MSC']['twitterShare']);
-        $this->Template->gplusTitle      = specialchars($GLOBALS['TL_LANG']['MSC']['gplusShare']);
+        $this->Template->linkedinTitle   = specialchars($GLOBALS['TL_LANG']['MSC']['linkedinShare']);
+        $this->Template->whatsappTitle   = specialchars($GLOBALS['TL_LANG']['MSC']['whatsappShare']);
         $this->Template->icalTitle       = specialchars($GLOBALS['TL_LANG']['MSC']['icalShareTitle']);
         $this->Template->facebookButton  = $this->facebook;
-        $this->Template->gplusButton     = $this->gplus;
         $this->Template->twitterButton   = $this->twitter;
+        $this->Template->linkedinButton  = $this->linkedin;
+        $this->Template->whatsappButton  = $this->whatsapp;
 
-        $this->Template->socialShare = $this->twitter || $this->facebook || $this->gplus;
+        $this->Template->socialShare = $this->twitter || $this->facebook || $this->linkedin || $this->whatsapp;
         $this->Template->shareTitle  = specialchars($GLOBALS['TL_LANG']['MSC']['shareTitle']);
     }
 
@@ -257,7 +264,7 @@ class Share extends \Frontend
         if ($objModel->share_customPrintTpl == '') {
             return $strBuffer;
         }
-        $config = is_array($objModule) ? $objModule : $objModule->Template->getData();
+        $config       = is_array($objModule) ? $objModule : $objModule->Template->getData();
         $objPrintPage = new PrintPage($objModel->share_customPrintTpl, $strBuffer, $config);
         $objPrintPage->generate($objPage);
         exit;
@@ -389,7 +396,6 @@ class Share extends \Frontend
     }
 
 
-
     /**
      * @param Model $objModel
      * @param string $strBuffer
@@ -436,8 +442,11 @@ class Share extends \Frontend
                 case "twitter":
                     $link = 'https://twitter.com/intent/tweet?url=' . $this->rawUrl . '&amp;text=' . $this->rawTitle;
                     break;
-                case "gplus":
-                    $link = 'https://plus.google.com/share?url=' . $this->rawUrl . '"';
+                case "linkedin":
+                    $link = 'http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $this->rawUrl . '&amp;title=' . $this->rawTitle;
+                    break;
+                case "whatsapp":
+                    $link = 'WhatsApp://send?text=' . $this->rawTitle . '%20' . $this->rawUrl;
                     break;
             }
         } else {
@@ -448,8 +457,12 @@ class Share extends \Frontend
                 case "twitter":
                     $link = 'share/?p=twitter&amp;u=' . $this->rawUrl . '&amp;t=' . $this->rawTitle;
                     break;
-                case "gplus":
-                    $link = 'share/?p=gplus&amp;u=' . $this->rawUrl . '&amp;t=' . $this->rawTitle;
+                case "linkedin":
+                    $link = 'http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $this->rawUrl . '&amp;title=' . $this->rawTitle;
+                    break;
+                case "whatsapp":
+                    $link = 'WhatsApp://send?text=' . $this->rawTitle . '%20' . $this->rawUrl;
+                    break;
             }
         }
 

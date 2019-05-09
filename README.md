@@ -83,7 +83,8 @@ This will add an array to the template with following key containing just the ur
 * mailto
 * facebook
 * twitter
-* gplus
+* linkedin
+* whatsapp
 
 
 ### Setup for articles

@@ -24,11 +24,12 @@ $arrLang['share_legend'] = 'Share settings';
 /**
  * References
  */
-$arrLang['references']['share_buttons']['pdfButton']   = 'Article as PDF';
-$arrLang['references']['share_buttons']['printButton'] = 'Print article';
+$arrLang['references']['share_buttons']['pdfButton']            = 'Article as PDF';
+$arrLang['references']['share_buttons']['printButton']          = 'Print article';
 $arrLang['references']['share_buttons']['printWithoutTemplate'] = 'Print article without print template';
-$arrLang['references']['share_buttons']['facebook']    = 'Share on Facebook';
-$arrLang['references']['share_buttons']['twitter']     = 'Share on Twitter';
-$arrLang['references']['share_buttons']['gplus']       = 'Share on Google+';
-$arrLang['references']['share_buttons']['mailto']      = 'Share with email';
-$arrLang['references']['share_buttons']['feedback']    = 'Send feedback';
+$arrLang['references']['share_buttons']['facebook']             = 'Share on Facebook';
+$arrLang['references']['share_buttons']['twitter']              = 'Share on Twitter';
+$arrLang['references']['share_buttons']['linkedin']             = 'Share on LinkedIn';
+$arrLang['references']['share_buttons']['whatsapp']             = 'Share on Whatsapp';
+$arrLang['references']['share_buttons']['mailto']               = 'Share with email';
+$arrLang['references']['share_buttons']['feedback']             = 'Send feedback';

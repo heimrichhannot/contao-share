@@ -12,3 +12,5 @@ $GLOBALS['TL_LANG']['MSC']['icalShareTitle'] = 'Zum Kalender hinzufügen';
 $GLOBALS['TL_LANG']['MSC']['shareTitle'] = 'Beitrag in sozialen Netzwerken teilen';
 $GLOBALS['TL_LANG']['MSC']['mailtoTitle'] = 'Beitrag per E-Mail teilen';
 $GLOBALS['TL_LANG']['MSC']['feedbackTitle'] = 'Feedback senden';
+$GLOBALS['TL_LANG']['MSC']['linkedinShare'] = 'Auf LinkedIn teilen';
+$GLOBALS['TL_LANG']['MSC']['whatsappShare'] = 'Auf Whatsapp teilen';

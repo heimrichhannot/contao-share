@@ -73,11 +73,12 @@ $arrLang['share_legend'] = 'Share-Einstellungen';
 /**
  * References
  */
-$arrLang['references']['share_buttons']['pdfButton']   = 'Beitrag als PDF';
-$arrLang['references']['share_buttons']['printButton'] = 'Beitrag Drucken';
+$arrLang['references']['share_buttons']['pdfButton']            = 'Beitrag als PDF';
+$arrLang['references']['share_buttons']['printButton']          = 'Beitrag Drucken';
 $arrLang['references']['share_buttons']['printWithoutTemplate'] = 'Beitrag Drucken ohne Template';
-$arrLang['references']['share_buttons']['facebook']    = 'Auf Facebook teilen';
-$arrLang['references']['share_buttons']['twitter']     = 'Auf Twitter teilen';
-$arrLang['references']['share_buttons']['gplus']       = 'Auf Google+ teilen';
-$arrLang['references']['share_buttons']['mailto']      = 'Per E-Mail teilen';
-$arrLang['references']['share_buttons']['feedback']    = 'Feedback senden';
+$arrLang['references']['share_buttons']['facebook']             = 'Auf Facebook teilen';
+$arrLang['references']['share_buttons']['twitter']              = 'Auf Twitter teilen';
+$arrLang['references']['share_buttons']['linkedin']             = 'Auf LinkedIn teilen';
+$arrLang['references']['share_buttons']['whatsapp']             = 'Auf WhatsApp teilen';
+$arrLang['references']['share_buttons']['mailto']               = 'Per E-Mail teilen';
+$arrLang['references']['share_buttons']['feedback']             = 'Feedback senden';
