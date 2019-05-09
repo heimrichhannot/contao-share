@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.8.1] - 2019-05-09
+
+### Changed
+- replaced WhatsApp:// with `whatsapp click to chat url` (https://wa.me/?text=)
+
 ## [1.8.0] - 2019-05-09
 
 ### Added

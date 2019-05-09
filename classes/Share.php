@@ -446,7 +446,7 @@ class Share extends \Frontend
                     $link = 'http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $this->rawUrl . '&amp;title=' . $this->rawTitle;
                     break;
                 case "whatsapp":
-                    $link = 'WhatsApp://send?text=' . $this->rawTitle . '%20' . $this->rawUrl;
+                    $link = 'https://wa.me/?text=' . $this->rawTitle . '%20' . $this->rawUrl;
                     break;
             }
         } else {
@@ -461,7 +461,7 @@ class Share extends \Frontend
                     $link = 'http://www.linkedin.com/shareArticle?mini=true&amp;url=' . $this->rawUrl . '&amp;title=' . $this->rawTitle;
                     break;
                 case "whatsapp":
-                    $link = 'WhatsApp://send?text=' . $this->rawTitle . '%20' . $this->rawUrl;
+                    $link = 'https://wa.me/?text=' . $this->rawTitle . '%20' . $this->rawUrl;
                     break;
             }
         }
