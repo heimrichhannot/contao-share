@@ -12,14 +12,22 @@
 namespace HeimrichHannot\Share;
 
 
+use Contao\CalendarEventsModel;
+use Contao\Environment;
+use Contao\File;
+use Contao\Frontend;
+use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\Model;
+use Contao\Model\Collection;
 use Contao\Module;
 use Contao\ModuleModel;
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\Request\Request;
+use Kigkonsult\Icalcreator\Vcalendar;
+use Kigkonsult\Icalcreator\Vevent;
 
-class Share extends \Frontend
+class Share extends Frontend
 {
     protected $strItem;
 
@@ -38,9 +46,9 @@ class Share extends \Frontend
 
     public function __construct($objModule, $objCurrent)
     {
-        if ($objModule instanceof \Model) {
+        if ($objModule instanceof Model) {
             $this->objModel = $objModule;
-        } elseif ($objModule instanceof \Model\Collection) {
+        } elseif ($objModule instanceof Collection) {
             $this->objModel = $objModule->current();
         }
         $this->objModule = $objModule;
@@ -132,14 +140,14 @@ class Share extends \Frontend
 
         // Export iCal
         if (Request::hasGet(Share::SHARE_REQUEST_PARAMETER_ICAL)) {
-            $this->generateIcal(\Input::get(Share::SHARE_REQUEST_PARAMETER_ICAL));
+            $this->generateIcal(Input::get(Share::SHARE_REQUEST_PARAMETER_ICAL));
 
             return;
         }
 
         // PDF
         if (Request::hasGet(static::SHARE_REQUEST_PARAMETER_PDF)) {
-            $strClass = \Module::findClass($this->objModel->type);
+            $strClass = Module::findClass($this->objModel->type);
             if (!class_exists($strClass)) {
                 return;
             }
@@ -154,7 +162,7 @@ class Share extends \Frontend
 
 
         // Render share buttons
-        $this->Template = new \FrontendTemplate($this->strTemplate);
+        $this->Template = new FrontendTemplate($this->strTemplate);
 
         $this->Template->setData($this->arrData);
 
@@ -184,7 +192,7 @@ class Share extends \Frontend
         global $objPage;
 
         // Add syndication variables
-        $request = Url::removeAllParametersFromUri(\Environment::get('indexFreeRequest'));
+        $request = Url::removeAllParametersFromUri(Environment::get('indexFreeRequest'));
 
         if (!$this->printWithoutTemplate && $this->share_customPrintTpl) {
             $this->Template->printUrl = Url::addQueryString(static::SHARE_REQUEST_PARAMETER_PRINT . '=' . $this->id);
@@ -275,49 +283,28 @@ class Share extends \Frontend
      */
     public function generateIcal($eventID)
     {
-        $ical = new \vcalendar();
-        $ical->setConfig('ical_' . $this->id);
-        $ical->setProperty('method', 'PUBLISH');
-        $ical->setProperty("X-WR-TIMEZONE", $GLOBALS['TL_CONFIG']['timeZone']);
+        $ical = new Vcalendar();
+        $ical->setMethod(Vcalendar::PUBLISH);
+        $ical->setXprop("X-WR-TIMEZONE", $GLOBALS['TL_CONFIG']['timeZone']);
         $time = time();
 
         // Get event
-        $objEvent = \CalendarEventsModel::findByPk($eventID);
+        $objEvent = CalendarEventsModel::findByPk($eventID);
 
-        $vevent = new \vevent();
+        $vevent = new Vevent();
         if ($objEvent->addTime) {
-            $vevent->setProperty(
-                'dtstart',
-                [
-                    'year'  => date('Y', $objEvent->startTime),
-                    'month' => date('m', $objEvent->startTime),
-                    'day'   => date('d', $objEvent->startTime),
-                    'hour'  => date('H', $objEvent->startTime),
-                    'min'   => date('i', $objEvent->startTime),
-                    'sec'   => 0,
-                ]
-            );
-            $vevent->setProperty(
-                'dtend',
-                [
-                    'year'  => date('Y', $objEvent->endTime),
-                    'month' => date('m', $objEvent->endTime),
-                    'day'   => date('d', $objEvent->endTime),
-                    'hour'  => date('H', $objEvent->endTime),
-                    'min'   => date('i', $objEvent->endTime),
-                    'sec'   => 0,
-                ]
-            );
+            $vevent->setDtstart(\DateTime::createFromFormat('U', $objEvent->startTime));
+            $vevent->setDtend(\DateTime::createFromFormat('U', $objEvent->endTime));
         } else {
-            $vevent->setProperty('dtstart', date('Ymd', $objEvent->startDate), ['VALUE' => 'DATE']);
+            $vevent->setDtstart(\DateTime::createFromFormat('U', $objEvent->startDate), ['VALUE' => 'DATE']);
             if (!strlen($objEvent->endDate) || $objEvent->endDate == 0) {
-                $vevent->setProperty('dtend', date('Ymd', $objEvent->startDate + 24 * 60 * 60), ['VALUE' => 'DATE']);
+                $vevent->setDtend(\DateTime::createFromFormat('U', $objEvent->startDate + 24 * 60 * 60), ['VALUE' => 'DATE']);
             } else {
-                $vevent->setProperty('dtend', date('Ymd', $objEvent->endDate + 24 * 60 * 60), ['VALUE' => 'DATE']);
+                $vevent->setDtend(\DateTime::createFromFormat('U', $objEvent->endDate + 24 * 60 * 60), ['VALUE' => 'DATE']);
             }
         }
-        $vevent->setProperty('summary', $objEvent->title, ENT_QUOTES, 'UTF-8');
-        $vevent->setProperty('description', strip_tags($objEvent->details ? $objEvent->details : $objEvent->teaser));
+        $vevent->setSummary($objEvent->title, ENT_QUOTES, 'UTF-8');
+        $vevent->setDescription(strip_tags($objEvent->details ? $objEvent->details : $objEvent->teaser));
         if ($objEvent->recurring) {
             $count     = 0;
             $arrRepeat = deserialize($objEvent->repeatEach);
@@ -352,7 +339,7 @@ class Share extends \Frontend
             if ($arg > 1) {
                 $rrule['INTERVAL'] = $arg;
             }
-            $vevent->setProperty('rrule', $rrule);
+            $vevent->setRrule($rrule);
         }
 
         /*
@@ -372,7 +359,7 @@ class Share extends \Frontend
                         date('s', $objEvent->startTime),
                     ],
                 ];
-                $vevent->setProperty('exdate', $exdate);
+                $vevent->setExdate($exdate);
             }
         }
         /*
@@ -380,10 +367,15 @@ class Share extends \Frontend
         */
 
         $ical->setComponent($vevent);
-        $ical->setConfig("FILENAME", urlencode($objEvent->title) . ".ics");
 
+        $vcalendarString = $ical->vtimezonePopulate()->createCalendar();
 
-        $ical->returnCalendar();
+        $tmpPath = 'files/tmp/share/'.uniqid(urlencode($objEvent->title).'_', true).'.ics';
+        File::putContent($tmpPath, $vcalendarString);
+
+        $file = new File($tmpPath);
+        $file->sendToBrowser(urlencode($objEvent->title).'.ics');
+        $file->delete();
     }
 
 
