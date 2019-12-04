@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.9.1] - 2019-12-04
+- fixed error in composer.json
+
 ## [1.9.0] - 2019-12-04
 - replaced contao-legacy/ical_creator dependency with kigkonsult/icalcreator
 - updated some namespaces

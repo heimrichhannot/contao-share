@@ -28,7 +28,7 @@
     "contao/core-bundle": "^3.5.1 || ~4.1",
     "contao-community-alliance/composer-plugin": "~2.4 || ~3.0",
     "heimrichhannot/contao-request": "^1.1",
-    "kigkonsult/icalcreator": "^2.22",
+    "kigkonsult/icalcreator": "^2.22"
   },
   "suggest": {
     "mpdf/mpdf": "^7.0"
