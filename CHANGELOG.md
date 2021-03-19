@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.10.0] - 2021-03-19
+- added new dependency
+- fixed filenames to be generated correctly, removed urlencoding of file names
+
 ## [1.9.1] - 2019-12-04
 - fixed error in composer.json
 

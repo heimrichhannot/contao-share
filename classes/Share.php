@@ -12,6 +12,8 @@
 namespace HeimrichHannot\Share;
 
 
+use Ausi\SlugGenerator\SlugGenerator;
+use Ausi\SlugGenerator\SlugOptions;
 use Contao\CalendarEventsModel;
 use Contao\Environment;
 use Contao\File;
@@ -365,16 +367,16 @@ class Share extends Frontend
         /*
         * end module event_recurrences handling
         */
-
+        $generator = new SlugGenerator((new SlugOptions)->setValidChars('a-zA-Z0-9')->setDelimiter('_')->setLocale('de'));
         $ical->setComponent($vevent);
 
         $vcalendarString = $ical->vtimezonePopulate()->createCalendar();
 
-        $tmpPath = 'files/tmp/share/'.uniqid(urlencode($objEvent->title).'_', true).'.ics';
+        $tmpPath = 'files/tmp/share/'.uniqid($generator->generate($objEvent->title) . '_', true).'.ics';
         File::putContent($tmpPath, $vcalendarString);
-
+        
         $file = new File($tmpPath);
-        $file->sendToBrowser(urlencode($objEvent->title).'.ics');
+        $file->sendToBrowser($generator->generate($objEvent->title) . '.ics');
         $file->delete();
     }
 
