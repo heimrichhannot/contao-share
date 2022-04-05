@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.11.0] - 2022-04-05
+- Changed: allow php 8
+- Changed: updated license
+
 ## [1.10.0] - 2021-03-19
 - added new dependency
 - fixed filenames to be generated correctly, removed urlencoding of file names
