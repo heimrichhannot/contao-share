@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.12.0] - 2022-11-14
+- Changed: make ContentModule override less invasive
+
 ## [1.11.0] - 2022-04-05
 - Changed: allow php 8
 - Changed: updated license

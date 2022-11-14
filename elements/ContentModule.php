@@ -10,9 +10,11 @@
 
 namespace HeimrichHannot\Share\Elements;
 
+use Contao\ContentModule as ContaoContentModule;
+use Contao\ModuleModel;
 use HeimrichHannot\Share\Share;
 
-class ContentModule extends \ContentModule
+class ContentModule extends ContaoContentModule
 {
     /**
      * Parse the template
@@ -21,37 +23,14 @@ class ContentModule extends \ContentModule
      */
     public function generate()
     {
-        if (TL_MODE == 'FE' && !BE_USER_LOGGED_IN && ($this->invisible || ($this->start != '' && $this->start > time()) || ($this->stop != '' && $this->stop < time())))
-        {
-            return '';
-        }
-
-        $objModel = \ModuleModel::findByPk($this->module);
+        $objModel = ModuleModel::findByPk($this->module);
 
         if ($objModel === null)
         {
             return '';
         }
 
-        $strClass = \Module::findClass($objModel->type);
-
-        if (!class_exists($strClass))
-        {
-            return '';
-        }
-
-        $objModel->typePrefix = 'ce_';
-
-        /** @var \Module $objModule */
-        $objModule = new $strClass($objModel, $this->strColumn);
-
-        // Overwrite spacing and CSS ID
-        $objModule->origSpace = $objModule->space;
-        $objModule->space = $this->space;
-        $objModule->origCssID = $objModule->cssID;
-        $objModule->cssID = $this->cssID;
-
-        $strBuffer = $objModule->generate();
+        $strBuffer = parent::generate();
 
         if (!$objModel->addShare)
         {
