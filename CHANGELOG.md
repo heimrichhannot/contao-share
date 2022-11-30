@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.12.1] - 2022-11-30
+- Fixed: compatibility with FrontendModuleController
+
 ## [1.12.0] - 2022-11-14
 - Changed: make ContentModule override less invasive
 

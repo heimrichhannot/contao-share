@@ -24,6 +24,7 @@ use Contao\Model;
 use Contao\Model\Collection;
 use Contao\Module;
 use Contao\ModuleModel;
+use Contao\ModuleProxy;
 use HeimrichHannot\Haste\Util\Url;
 use HeimrichHannot\Request\Request;
 use Kigkonsult\Icalcreator\Vcalendar;
@@ -274,7 +275,15 @@ class Share extends Frontend
         if ($objModel->share_customPrintTpl == '') {
             return $strBuffer;
         }
-        $config       = is_array($objModule) ? $objModule : $objModule->Template->getData();
+
+        if (is_array($objModule)) {
+            $config = $objModule;
+        } elseif ($objModule instanceof ModuleProxy) {
+            $config = $objModel->row();
+        } else {
+            $config = $objModule->Template->getData();
+        }
+
         $objPrintPage = new PrintPage($objModel->share_customPrintTpl, $strBuffer, $config);
         $objPrintPage->generate($objPage);
         exit;
