@@ -254,7 +254,7 @@ class Share extends Frontend
      *
      * @return string The output buffer is always returned
      */
-    public static function renderPrintableModule($objModel, $strBuffer, $objModule)
+    public static function renderPrintableModule($objModel, $strBuffer, $objModule = null)
     {
         $arrButtons = deserialize($objModel->share_buttons, true);
 
@@ -276,12 +276,12 @@ class Share extends Frontend
             return $strBuffer;
         }
 
-        if (is_array($objModule)) {
-            $config = $objModule;
-        } elseif ($objModule instanceof ModuleProxy) {
-            $config = $objModel->row();
-        } else {
+        if ($objModule instanceof Module && !($objModule instanceof ModuleProxy)) {
             $config = $objModule->Template->getData();
+        } elseif (is_array($objModule)) {
+            $config = $objModule;
+        } else {
+            $config = $objModel->row();
         }
 
         $objPrintPage = new PrintPage($objModel->share_customPrintTpl, $strBuffer, $config);

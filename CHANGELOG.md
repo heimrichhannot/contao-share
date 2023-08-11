@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.12.2] - 2023-08-11
+- Fixed: exception when using print function in some cases
+
 ## [1.12.1] - 2022-11-30
 - Fixed: compatibility with FrontendModuleController
 
