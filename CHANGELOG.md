@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.12.3] - 2024-01-30
+- Fixed: php8 warning
+
 ## [1.12.2] - 2023-08-11
 - Fixed: exception when using print function in some cases
 
