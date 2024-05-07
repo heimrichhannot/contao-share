@@ -314,7 +314,7 @@ class Share extends Frontend
                 $vevent->setDtend(\DateTime::createFromFormat('U', $objEvent->endDate + 24 * 60 * 60), ['VALUE' => 'DATE']);
             }
         }
-        $vevent->setSummary($objEvent->title, ENT_QUOTES, 'UTF-8');
+        $vevent->setSummary(htmlspecialchars($objEvent->title, ENT_QUOTES));
         $vevent->setDescription(strip_tags($objEvent->details ? $objEvent->details : $objEvent->teaser));
         if ($objEvent->recurring) {
             $count     = 0;
