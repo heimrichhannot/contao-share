@@ -34,7 +34,7 @@ class Module extends Backend
         $objModule = \ModuleModel::findByPk($objDc->id);
         $arrDca = &$GLOBALS['TL_DCA']['tl_module'];
 
-        if ($objModule->addShare)
+        if ($objModule !== null && $objModule->addShare)
         {
             $arrButtons = deserialize($objModule->share_buttons, true);
 

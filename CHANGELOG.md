@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.12.5] - 2024-12-11
+- Fixed: php8 warning
+
 ## [1.12.4] - 2024-05-07
 - Fixed: exception with ical generation
 
